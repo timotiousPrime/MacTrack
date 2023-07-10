@@ -1,12 +1,20 @@
 <nav class="navbar  container-fluid navbar-expand-lg navbar-dark bg-dark">
-    <ul class="navbar-nav container-fluid d-flex">
-        <li class="nav-item ">
-            <a class="navbar-brand" href="#">MacTrack</a>
-            
+    <ul class="navbar-nav container-fluid d-flex justify-content p-2 ">
+        <li class="nav-item  me-auto mb-3">
+            <a class="navbar-brand" href="{% url 'Home' %}">MacTrack</a>
         </li>
-
+        {% if request.user.username %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'Home' %}" tabindex="-1" aria-disabled="true">{{ request.user.username }}</a>
+        </li>
         <li class="nav-item ">
-            <a class="nav-link" href="#" tabindex="-1" aria-disabled="true">Login</a>
+            <a class="nav-link" href="{% url 'Logout' %}" tabindex="-1" aria-disabled="true">Logout</a>
+        </li>
+        {% else %}
+        <li class="nav-item ms-auto">
+            <a class="nav-link" href="{% url 'Login' %}" tabindex="-1" aria-disabled="true">Login</a>
+        </li>
+        {% endif %}
         </li>
     </ul>
 </nav>

@@ -1,0 +1,23 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+
+    <h1>Login Page</h1>
+    <p>Please login to begin</p>
+
+    <form method="POST">
+    {% csrf_token %}
+    {% if form %}
+        {% if error %}
+        <p class="alert alert-warning" role="alert">{{ error }}</p>
+        <br>
+        {% endif %}
+        {{ form }}
+    {% else %}
+        {{ error }}
+        {{ form }}
+    {% endif %}
+        <button type="submit" formmethod="post" formaction="{% url 'Login' %}" class="btn btn-primary">Login</button>
+    </form>
+
+{% endblock content %}
