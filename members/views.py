@@ -2,6 +2,8 @@ from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate, login, logout
 from members.forms import Login_Form
 
+from members.models import User_Profile
+
 # Create your views here.
 
 def login_view(request):
@@ -30,3 +32,10 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('Home')
+
+
+def userProfile(request, username):
+    context = {
+        "user": User_Profile.get(username=username),
+    }
+    return render (request, "members/userProfile.html", context)
