@@ -3,7 +3,7 @@
         <li class="nav-item  me-auto mb-3">
             <a class="navbar-brand" href="{% url 'Home' %}">MacTrack</a>
         </li>
-        {% if request.user.username %}
+        {% if request.user.is_authenticated %}
         <li class="nav-item">
             <a class="nav-link" href="{% url 'Home' %}" tabindex="-1" aria-disabled="true">{{ request.user.username }}</a>
         </li>
@@ -15,7 +15,6 @@
             <a class="nav-link" href="{% url 'Login' %}" tabindex="-1" aria-disabled="true">Login</a>
         </li>
         {% endif %}
-        
         </li>
     </ul>
 </nav>
