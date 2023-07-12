@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
 
 # Create your models here.
 class User_Profile(models.Model):
@@ -21,4 +22,12 @@ class User_Profile(models.Model):
     is_active = models.BooleanField(default=True)
 
     def __str__(self) -> str:
-        return self.firstName + ' ' + self.lastName
+        return self.user | "No username saved"
+    
+
+def create_profile(sender, instance, created, **kwargs):
+    if created:
+        userProfile = User_Profile(user=instance)
+        userProfile.save()
+
+post_save.connect(create_profile, sender=User)

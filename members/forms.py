@@ -17,9 +17,9 @@ class User_Profile(forms.ModelForm):
         model = User_Profile
         fields = ('firstName', 'lastName', 'role', 'is_active')
 
-        # widgets = {
-        #     'firstName': forms.TextInput(attrs={'class': 'form-control'}),
-        #     'lastName': forms.TextInput(attrs={'class': 'form-control'}),
-        #     'role': forms.Select(attrs={'class': 'form-control'}),
-        #     'is_active': forms.BooleanField(attrs={'class': 'form-control'}),
-        # }
+        widgets = {
+            'firstName': forms.TextInput(attrs={'class': 'form-control'}),
+            'lastName': forms.TextInput(attrs={'class': 'form-control'}),
+            'role': forms.Select(attrs={'class': 'form-control'}),
+            'is_active': forms.CheckboxInput(attrs={'class': 'form-control'}),
+        }

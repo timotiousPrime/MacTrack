@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate, login, logout
-from members.forms import Login_Form
+from members.forms import Login_Form, User_Profile
 
 from members.models import User_Profile
 
@@ -35,7 +35,13 @@ def logout_view(request):
 
 
 def userProfile(request, username):
+
+    profiles = User_Profile.objects.all()
+    print("*********************************************************")
+    # print (profiles)
     context = {
-        "user": User_Profile.get(username=username),
+        # "user": User_Profile.objects.get(username=username),
+        "user": "User-TEST",
+        "userProfileForm": User_Profile
     }
     return render (request, "members/userProfile.html", context)
