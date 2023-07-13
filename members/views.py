@@ -12,7 +12,7 @@ def loginView(request):
         context = {
             'form': Login_Form()
         }
-        return render(request, 'members/LoginPage.html', context)
+        return render(request, 'members/loginPage.html', context)
     
     if request.method == "POST":
         print('method is post')
