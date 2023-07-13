@@ -5,6 +5,15 @@
 <h1>Welcome {{ user.firstName }}</h1>
 <p>This is your profile</p>
 
-{{ userProfileForm }}
+{{ profile.as_p }}
+
+<div class="userProfileForm">
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ userProfileForm }}
+        <br>
+        <button type="submit" formmethod="post" formaction="{% url 'postUserProfileUpdate' %}" class="btn btn-warning">Update</button>
+    </form>
+</div>
 
 {% endblock content %}
