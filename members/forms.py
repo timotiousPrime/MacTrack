@@ -12,14 +12,15 @@ class Login_Form(forms.ModelForm):
             'password': forms.PasswordInput(attrs={'class': 'form-control'}),
         }
 
-class User_Profile(forms.ModelForm):
+
+class User_Profile_Form(forms.ModelForm):
     class Meta:
         model = User_Profile
-        fields = ('firstName', 'lastName', 'role', 'is_active')
+        fields = ( 'firstName', 'lastName', 'role', 'is_active')
 
-        # widgets = {
-        #     'firstName': forms.TextInput(attrs={'class': 'form-control'}),
-        #     'lastName': forms.TextInput(attrs={'class': 'form-control'}),
-        #     'role': forms.Select(attrs={'class': 'form-control'}),
-        #     'is_active': forms.BooleanField(attrs={'class': 'form-control'}),
-        # }
+        widgets = {
+            'firstName': forms.TextInput(attrs={'class': 'form-control'}),
+            'lastName': forms.TextInput(attrs={'class': 'form-control'}),
+            'role': forms.Select(attrs={'class': 'form-select'}),
+            'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        }
