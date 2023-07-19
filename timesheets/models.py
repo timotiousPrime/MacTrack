@@ -15,7 +15,7 @@ class TaskTime(models.Model):
 
     jobCode = models.CharField(max_length=16, default="General", null=False, blank=False)
     description = models.CharField(max_length=3, default="Gen", choices=JOB_DESCRIPTIONS, null=False, blank=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE())
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     time_spent=models.TimeField()
 
     def __str__(self) -> str:
