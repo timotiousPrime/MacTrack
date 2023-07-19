@@ -5,7 +5,7 @@
         </li>
         {% if request.user.username %}
         <li class="nav-item">
-            <a class="nav-link" href="{% url 'Home' %}" tabindex="-1" aria-disabled="true">{{ request.user.username }}</a>
+            <a class="nav-link" href="{% url 'User_Profile' request.user.username %}" tabindex="-1" aria-disabled="true">{{ request.user.username }}</a>
         </li>
         <li class="nav-item ">
             <a class="nav-link" href="{% url 'Logout' %}" tabindex="-1" aria-disabled="true">Logout</a>
