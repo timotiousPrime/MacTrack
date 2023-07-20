@@ -28,25 +28,26 @@
                 <input class="form-control" type="text" placeholder="Job Code" aria-label="default input example">
             </td>
             <td>
-                <input class="form-control" list="jobDescriptions" id="jobDescriptions" placeholder="General">
-                <datalist id="jobDescriptions">
-                    <option value="Admin">
-                    <option value="Design">
-                    <option value="Documentation">
-                    <option value="Drawings">
-                    <option value="General">
-                </datalist>
+              <select class="form-select" aria-label="Job Description">
+                <option selected>Select the job type</option>
+                <option value="Adm">Admin</option>
+                <option value="Des">Design</option>
+                <option value="Doc">Documentation</option>
+                <option value="Dwg">Drawings</option>
+                <option value="Gen">General</option>
+              </select>
+                
             </td>
             <td>
                 <input type="time" class="form-control" id="inputTime" name="time">
             </td>
             <td>
                 <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                    <button type="button" class="btn btn-sm btn-danger">Delete</button>
-                    <button type="button" class="btn btn-sm btn-warning">Edit</button>
+                  <button type="button" class="btn btn-sm btn-success">Start</button> 
+                  <button type="button" class="btn btn-sm btn-warning">Add</button>
+                  <button type="button" class="btn btn-sm btn-danger">Delete</button>
                     <!-- Update start button to change to stop when timer is running -->
                     <!-- Add logic to make timer work -->
-                    <button type="button" class="btn btn-sm btn-success">Start</button> 
                   </div>
             </td>
           </tr>
