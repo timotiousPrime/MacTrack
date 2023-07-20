@@ -1,6 +1,6 @@
-Create user profile
-Create Task Timer, link it to users.
+Create user profile - DONE***
+Create Task Timer, link it to users. - DONE***
+Fix logout bug - DONE***
 Create template for task timer. Make it only show current users task history
 Add section to user profile with all users tasks logged
 Finish Template outline and functionality
-Fix logout bug
