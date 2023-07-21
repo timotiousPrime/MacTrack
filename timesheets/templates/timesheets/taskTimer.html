@@ -2,70 +2,53 @@
 
 {% block content %}
 
-<h1>Welome to the timesheet!</h1>
-<p>Hey {{ user.username }}</p>
+<h1>Welcome to the your Task Timer</h1>
 
-<form method="post" class="container">
-    <table class="table table-hover">
-        <thead>
-          <tr>
-            <th scope="col">Daily Tasks</th>
-            <th scope="col">Job Code</th>
-            <th scope="col">Description</th>
-            <th scope="col">Time Spent</th>
-            <th scope="col"><div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                <button type="button" class="btn btn-sm btn-success">New Task</button>
-                <button type="button" class="btn btn-sm btn-info">New Daily Timesheet</button>
-              </div></th>
-          </tr>
-        </thead>
-        <tbody>
-            <!-- Task Timer Inputs -->
-            {% csrf_token %}
-          <tr>
-            <th scope="row">Task</th>
-            <td>
-                <input class="form-control" type="text" placeholder="Job Code" aria-label="default input example">
-            </td>
-            <td>
-              <select class="form-select" aria-label="Job Description">
-                <option selected>Select the job type</option>
-                <option value="Adm">Admin</option>
-                <option value="Des">Design</option>
-                <option value="Doc">Documentation</option>
-                <option value="Dwg">Drawings</option>
-                <option value="Gen">General</option>
-              </select>
-                
-            </td>
-            <td>
-                <input type="time" class="form-control" id="inputTime" name="time" step="2" value="00:00:00">
-            </td>
-            <td>
-                <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                  <button type="button" class="btn btn-sm btn-success" id="timerButton" >Start</button> 
-                  <button type="button" class="btn btn-sm btn-warning">Add</button>
-                  <button type="button" class="btn btn-sm btn-danger">Delete</button>
-                    <!-- Update start button to change to stop when timer is running -->
-                    <!-- Add logic to make timer work -->
-                  </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+<form method="POST" class="container">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Daily Tasks</th>
+        <th scope="col">Job Code</th>
+        <th scope="col">Description</th>
+        <th scope="col">Time Spent</th>
+        <th scope="col"><div class="btn-group" role="group" aria-label="Basic mixed styles example">
+            <button type="button" class="btn btn-sm btn-success">New Task</button>
+            <button type="button" class="btn btn-sm btn-info">New Daily Timesheet</button>
+          </div></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">Task ID</th>
+      {% for row in taskTimerForm %}
+        <td scope="col">
+          {{ row }}
+        </td>   
+      {% endfor %}
+        <td>
+          <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+            <button type="button" class="btn btn-sm btn-success" id="timerButton" >Start</button> 
+            <button type="button" class="btn btn-sm btn-warning">Add</button>
+            <button type="button" class="btn btn-sm btn-danger">Delete</button>
+              <!-- Update start button to change to stop when timer is running -->
+              <!-- Add logic to make timer work -->
+            </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </form>
 
-{% if userTaskTimes.len > 0 %}
 <h3>Here is a list of all your previous tasks and times</h3>
-
+{% if userTaskTimes.len > 0 %}
     {% for task in userTaskTimes %}
-    
         <p>{{ task }}</p>
-    
     {% endfor %}
-
-
+{% else %}
+  <p>You don't have any timed tasks</p>
 {% endif  %}
+
 
 <script>
   console.log("This is Tim's script")
