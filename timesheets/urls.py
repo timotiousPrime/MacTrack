@@ -4,4 +4,6 @@ from timesheets import views
 
 urlpatterns = [
     path("", views.task_timer, name="Task_Timer"),
+    path("start/", views.start_timer, name="Start_Timer"),
+    path("stop/", views.start_timer, name="Stop_Timer"),
 ]
