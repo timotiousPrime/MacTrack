@@ -13,10 +13,13 @@ class TaskTime(models.Model):
         ("Gen", "General"),
     ]
 
-    jobCode = models.CharField(max_length=16, default="General", null=False, blank=False)
+    job_code = models.CharField(max_length=16, default="General", null=False, blank=False)
     description = models.CharField(max_length=3, default="Gen", choices=JOB_DESCRIPTIONS, null=False, blank=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    time_spent=models.TimeField()
+    elapsed_time = models.TimeField(blank=True, null=True)
+    time_started = models.DateTimeField(blank=True, null=True)
+    time_stopped = models.DateTimeField(blank=True, null=True)
+    is_timing = models.BooleanField(blank=False, null=False, default=False)
 
     def __str__(self) -> str:
         return self.jobCode + ': ' + str(self.times_spent)
