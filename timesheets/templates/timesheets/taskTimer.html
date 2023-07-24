@@ -36,21 +36,21 @@
     </tr>
   </thead>
   <tbody>
-  {% for task in userTasks %}
-    <tr id="taskHistoryRow">
+  {% for task in userTasks reversed %}
+    <tr id="task{{ task.id }}">
       <!-- <th scope="col">
         {{ task.id }}
       </th> -->
-      <td class="col-2" scope="col">
+      <td id="date_created{{ task.id }}" class="col-2" scope="col">
         {{ task.date_created|date:"d-m-Y" }}
       </td>
-      <td  class="col-3" scope="col ">
+      <td id="job_code{{ task.id }}" class="col-3" scope="col ">
         {{ task.job_code }}
       </td>
-      <td  class="col-3" scope="col">
+      <td id="description{{ task.id }}" class="col-3" scope="col">
         {{ task.description }}
       </td>
-      <td  class="col-2" id="elapsed_time_display" scope="col">
+      <td id="elapsed_time{{ task.id }}" class="col-2" id="elapsed_time_display" scope="col">
         {{ task.elapsed_time }}
       </td>
       <td class="col-2" scope="col">
@@ -58,12 +58,12 @@
           <div class=" container btn-group btn-group-sm" role="group" aria-label="Basic mixed styles example">
             {% csrf_token %}
             {% if task.is_running == True %}
-            <button id="pause_btn" type="submit" class="btn btn-success" type="submit" formaction="{% url 'Stop_Timer' task.id %}"> Pause </button>
+            <button type="submit" class="btn btn-secondary" type="submit" formaction="{% url 'Stop_Timer' task.id %}"> Pause </button>
             {% else %}
-            <button id="start_btn" type="submit" class="btn btn-success" type="submit" formaction="{% url 'Start_Timer' task.id %}"> Start </button>
+            <button type="submit" class="btn btn-success" type="submit" formaction="{% url 'Start_Timer' task.id %}"> Start </button>
+            <button id="edit_task{{ task.id }}" type="submit" class="btn btn-warning" type="submit" formaction="{% url 'Edit_Timer' task.id %}">Edit</button>
             {% endif %}
-            <button id="edit_btn" type="submit" class="btn btn-warning" type="submit" formaction="{% url 'Edit_Timer' task.id %}">Edit</button>
-            <button id="delete_btn" type="submit" class="btn btn-danger" type="submit" formaction="{% url 'Delete_Timer' task.id %}">Delete</button>
+            <button type="submit" class="btn btn-danger" type="submit" formaction="{% url 'Delete_Timer' task.id %}">Delete</button>
           </div>
         </form>
       </td>
@@ -76,13 +76,22 @@
   </tbody>
 </table>
 
-
 <script>
-  console.log("This is Tim's script")
+  // Handle Edit functionality for tasks
+  let btns = document.getElementsByTagName('button')
+  let btnsArr = Array.from(btns)
+
+  let editBtns = btnsArr.reduce((arr, ele) => {
+    ele.getAttribute("id").slice(0,3) === "edit" ? arr.push(ele) : console.log(ele)
+  }, [])
+
+</script>
+<script>
   const startBtn = document.getElementById("addTask")
   let seconds = 0
   let isTiming = false
   let timer
+  
 
   function getAccumalatedTime(){
     let inputTime = document.getElementById("elapsed_time_input").value
