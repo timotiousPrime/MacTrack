@@ -16,7 +16,7 @@
           </td>   
         {% endfor %}
           <td>
-              <button type="submit" formmethod="POST" formaction="{% url 'Create_Timer' %}" class="btn btn-m btn-primary">Add</button>
+              <button id="addTask" type="submit" formmethod="POST" formaction="{% url 'Create_Timer' %}" class="btn btn-m btn-primary">Add</button>
           </td>
         </form>
       </tr>
@@ -27,8 +27,9 @@
 <table class="table table-hover ">
   <thead>
     <tr>
-      <th scope="col">Daily Tasks</th>
-      <th  scope="col">Job Code</th>
+      <!-- <th scope="col">Daily Tasks</th> -->
+      <th scope="col">Date Created</th>
+      <th scope="col">Job Code</th>
       <th scope="col">Description</th>
       <th scope="col">Time Spent</th>
       <th scope="col"></th>
@@ -36,29 +37,35 @@
   </thead>
   <tbody>
   {% for task in userTasks %}
-    <tr>
-      <th scope="col">
+    <tr id="taskHistoryRow">
+      <!-- <th scope="col">
         {{ task.id }}
-      </th>
+      </th> -->
+      <td scope="col">
+        {{ task.date_created|date:"d-m-Y" }}
+      </td>
       <td scope="col ">
         {{ task.job_code }}
       </td>
       <td scope="col">
         {{ task.description }}
       </td>
-      <td scope="col">
+      <td id="elapsed_time_display" scope="col">
         {{ task.elapsed_time }}
       </td>
       <td class="col-2" scope="col">
-        <div class=" container btn-group" role="group" aria-label="Basic mixed styles example">
-          {% if task.is_running == True %}
-          <button type="button" class="btn btn-success"> Pause </button>
-          {% else %} 
-          <button type="button" class="btn btn-success"> Start </button>
-          {% endif %}
-          <button type="button" class="btn btn-warning">Edit</button>
-          <button type="button" class="btn btn-danger">Delete</button>
-        </div>
+        <form method="POST">
+          <div class=" container btn-group btn-group-sm" role="group" aria-label="Basic mixed styles example">
+            {% csrf_token %}
+            {% if task.is_running == True %}
+            <button id="pause_btn" type="submit" class="btn btn-success" type="submit" formaction="{% url 'Stop_Timer' task.id %}"> Pause </button>
+            {% else %}
+            <button id="start_btn" type="submit" class="btn btn-success" type="submit" formaction="{% url 'Start_Timer' task.id %}"> Start </button>
+            {% endif %}
+            <button id="edit_btn" type="submit" class="btn btn-warning" type="submit" formaction="{% url 'Edit_Timer' task.id %}">Edit</button>
+            <button id="delete_btn" type="submit" class="btn btn-danger" type="submit" formaction="{% url 'Delete_Timer' task.id %}">Delete</button>
+          </div>
+        </form>
       </td>
     </tr> 
   {% empty %}
@@ -72,7 +79,7 @@
 
 <script>
   console.log("This is Tim's script")
-  const startBtn = document.getElementById("timerButton")
+  const startBtn = document.getElementById("addTask")
   let seconds = 0
   let isTiming = false
   let timer
