@@ -95,7 +95,6 @@ def edit_timer(request, task_id):
 
 
 def delete_timer(request, task_id):
-    print("*****DELETE BUTTON CLICKED*****")
     if request.method == "POST":    
         task = TaskTime.objects.get(id=task_id)
         task.delete()
