@@ -51,7 +51,7 @@ class TaskTime(models.Model):
             hours, minutes = divmod(minutes, 60)
 
             # convert the timedelta to time format and save to the object
-            total_elapsed_time = "{:02d}:{:02d}:{:02d}".format(hours, minutes, seconds)
+            total_elapsed_time = timedelta(hours=hours, minutes=minutes, seconds=seconds)
 
             self.elapsed_time = total_elapsed_time
             self.save()  # Don't forget to save the changes
