@@ -11,12 +11,6 @@ def task_timer(request):
     # user_task_times = get_list_or_404(TaskTime, user=request.user.id)
     user_tasks = list(TaskTime.objects.filter(user=request.user.id))
 
-    if len(user_tasks) > 1:
-        print("its bigger than 1")
-
-    if len(user_tasks) < 1:
-        print("its SMALLER than 1")
-
     context = {
         "user": user,
         "taskTimerForm": Task_Timer_Form,
@@ -46,6 +40,59 @@ def create_task(request):
     return render(request, "timesheets/taskTimer.html", context)
 
 
-def start_timer(request):
-    context = {}
+def start_timer(request, task_id):
+    if request.method == "POST":
+        task = TaskTime.objects.get(id=task_id)
+        return redirect("Task_Timer")
+    
+    user = request.user
+    userTasks = TaskTime.objects.filter(user=user)
+    context = {
+        "taskTimerForm": Task_Timer_Form,
+        "user": user,
+        "userTasks": userTasks
+    }
+    return render(request, "timesheets/taskTimer.html", context)
+
+
+def stop_timer(request, task_id):
+    user = request.user
+    userTasks = TaskTime.objects.filter(user=user)
+    context = {
+        "taskTimerForm": Task_Timer_Form,
+        "user": user,
+        "userTasks": userTasks
+    }
+    return render(request, "timesheets/taskTimer.html", context)
+
+
+def edit_timer(request, task_id):
+    if request.method == "POST":
+        task = TaskTime.objects.get(id=task_id)
+        return redirect("Task_Timer")
+
+    user = request.user
+    userTasks = TaskTime.objects.filter(user=user)
+    context = {
+        "taskTimerForm": Task_Timer_Form,
+        "user": user,
+        "userTasks": userTasks
+    }
+    return render(request, "timesheets/taskTimer.html", context)
+
+
+def delete_timer(request, task_id):
+    print("*****DELETE BUTTON CLICKED*****")
+    if request.method == "POST":    
+        task = TaskTime.objects.get(id=task_id)
+        task.delete()
+        return redirect("Task_Timer")
+
+    user = request.user
+    userTasks = TaskTime.objects.filter(user=user)
+    context = {
+        "taskTimerForm": Task_Timer_Form,
+        "user": user,
+        "userTasks": userTasks
+    }
     return render(request, "timesheets/taskTimer.html", context)
