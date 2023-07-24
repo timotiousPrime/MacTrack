@@ -19,11 +19,11 @@ class Task_Timer_Form(forms.ModelForm):
             "elapsed_time": forms.TextInput(
                 attrs={
                     "class": "form-control",
-                    "pattern": "\d{2}:\d{2}",
-                    "title": "Enter duration in the format: HH:MM",
+                    "pattern": "\d{2}:\d{2}:\d{2}",
+                    "title": "Enter duration in the format: HH:MM:SS",
                     "id": "elapsed_time_input",
                     "name": "time",
-                    "value": "00:00",
+                    "value": "00:00:00",
                 }
             ),
         }
