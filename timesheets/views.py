@@ -43,6 +43,10 @@ def create_task(request):
 def start_timer(request, task_id):
     if request.method == "POST":
         task = TaskTime.objects.get(id=task_id)
+        task.is_running = True
+        task.time_started = timezone.now()
+        task.date_edited = timezone.now()
+        task.save()
         return redirect("Task_Timer")
     
     user = request.user
@@ -56,6 +60,15 @@ def start_timer(request, task_id):
 
 
 def stop_timer(request, task_id):
+    if request.method == "POST":
+        task = TaskTime.objects.get(id=task_id)
+        task.is_running = False
+        task.time_stopped = timezone.now()
+        task.get_elapsed_time()
+        task.date_edited = timezone.now()
+        task.save()
+        return redirect("Task_Timer")
+    
     user = request.user
     userTasks = TaskTime.objects.filter(user=user)
     context = {
