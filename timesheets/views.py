@@ -80,9 +80,24 @@ def stop_timer(request, task_id):
 
 
 def edit_timer(request, task_id):
+    print("EDIT VIEW CALLED**************")
+    task = TaskTime.objects.get(id=task_id)
     if request.method == "POST":
-        task = TaskTime.objects.get(id=task_id)
-        return redirect("Task_Timer")
+        print("******** REQUEST.POST")
+        form = Task_Timer_Form(request.POST or None, instance=task)
+        if form.is_valid():
+            task.date_edited = timezone.now()
+            task.save() 
+            return redirect("Task_Timer")
+    
+    if request.method == "GET":
+        print("********Getting Edit view********")
+        form = Task_Timer_Form(instance=task)
+        context = {
+            "form": form,
+            "task": task,
+        }
+        return render(request, "timesheets/edit.html", context)
 
     user = request.user
     userTasks = TaskTime.objects.filter(user=user)
