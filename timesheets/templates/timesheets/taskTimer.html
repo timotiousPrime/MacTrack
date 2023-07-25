@@ -1,7 +1,6 @@
 {% extends 'main/base.html' %}
 
 {% block content %}
-
 <h1>Welcome to the your Task Timer</h1>
 
   <table class=" table table-hover">
@@ -16,7 +15,7 @@
           </td>   
         {% endfor %}
           <td>
-              <button id="addTask" type="submit" formmethod="POST" formaction="{% url 'Create_Timer' %}" class="btn btn-m btn-primary">Add</button>
+            <button id="addTask" type="submit" formmethod="POST" formaction="{% url 'Create_Timer' %}" class="btn btn-m btn-primary">Add</button>
           </td>
         </form>
       </tr>
@@ -27,7 +26,6 @@
 <table class="table table-hover ">
   <thead>
     <tr>
-      <!-- <th scope="col">Daily Tasks</th> -->
       <th scope="col">Date Created</th>
       <th scope="col">Job Code</th>
       <th scope="col">Description</th>
@@ -37,35 +35,29 @@
   </thead>
   <tbody>
   {% for task in userTasks reversed %}
-    <tr id="task{{ task.id }}">
-      <!-- <th scope="col">
-        {{ task.id }}
-      </th> -->
-      <td id="date_created{{ task.id }}" class="col-2" scope="col">
+    <tr id="task_{{ task.id }}">
+      <td id="date_created_{{ task.id }}" class="col-2 task_created_date" scope="col">
         {{ task.date_created|date:"d-m-Y" }}
       </td>
-      <td id="job_code{{ task.id }}" class="col-3" scope="col ">
+      <td id="job_code_{{ task.id }}" class="col-3 task_job_code editable" scope="col ">
         {{ task.job_code }}
       </td>
-      <td id="description{{ task.id }}" class="col-3" scope="col">
+      <td id="description_{{ task.id }}" class="col-3 task_elapsed_time editable" scope="col">
         {{ task.description }}
       </td>
-      <td id="elapsed_time{{ task.id }}" class="col-2" id="elapsed_time_display" scope="col">
+      <td id="elapsed_time_{{ task.id }}" class="col-2 task_elapsed_time editable" id="elapsed_time_display" scope="col">
         {{ task.elapsed_time }}
       </td>
       <td class="col-2" scope="col">
-        <form method="POST">
-          <div class=" container btn-group btn-group-sm" role="group" aria-label="Basic mixed styles example">
-            {% csrf_token %}
+          <div id="task_{{ task.id }}_btn_group" class=" container btn-group btn-group-sm" role="group" aria-label="Basic mixed styles example">
             {% if task.is_running == True %}
-            <button type="submit" class="btn btn-secondary" type="submit" formaction="{% url 'Stop_Timer' task.id %}"> Pause </button>
+            <button type="submit" class="btn btn-secondary pause_btn" type="submit" formaction="{% url 'Stop_Timer' task.id %}"> Pause </button>
             {% else %}
-            <button type="submit" class="btn btn-success" type="submit" formaction="{% url 'Start_Timer' task.id %}"> Start </button>
-            <button id="edit_task{{ task.id }}" type="submit" class="btn btn-warning" type="submit" formaction="{% url 'Edit_Timer' task.id %}">Edit</button>
+            <button type="submit" class="btn btn-success start_btn" type="submit" formaction="{% url 'Start_Timer' task.id %}"> Start </button>
+            <button id="edit_task_{{ task.id }}" data-bs-toggle="modal" data-bs-target="#editModal" type="button" class="btn btn-warning edit_btn" hx-get="{% url 'Edit_Timer' task.id %}" hx-target="#dialog">Edit</button>
             {% endif %}
-            <button type="submit" class="btn btn-danger" type="submit" formaction="{% url 'Delete_Timer' task.id %}">Delete</button>
+            <button type="submit" class="btn btn-danger delete_btn" type="submit" formaction="{% url 'Delete_Timer' task.id %}">Delete</button>
           </div>
-        </form>
       </td>
     </tr> 
   {% empty %}
@@ -76,17 +68,83 @@
   </tbody>
 </table>
 
-<script>
+
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div id="dialog" class="modal-dialog">
+
+  </div>
+</div>
+
+<!-- <script>
   // Handle Edit functionality for tasks
-  let btns = document.getElementsByTagName('button')
-  let btnsArr = Array.from(btns)
+  $(document).ready(() => {
+    $(".edit_btn").each(function() {
+    $(this).click(() => {
+      // event.preventDefault()
+      let btnId = $(this).attr('id')
+      let taskId = btnId.split("_")[2]
 
-  let editBtns = btnsArr.reduce((arr, ele) => {
-    ele.getAttribute("id").slice(0,3) === "edit" ? arr.push(ele) : console.log(ele)
-  }, [])
+      // add form to row 
+      let taskRow = $(`task_${taskId}`)
 
-</script>
+
+      // Define fields we want to turn into input fields
+      let jobCodeField = $("#job_code_" + taskId)
+      let descField = $("#description_" + taskId)
+      let elTime = $("#elapsed_time_" + taskId)
+
+      // instantiate new edit buttons
+      let updateBtn = `<buttontype="submit" class="btn btn-secondary update_btn" type="submit" formaction="{% url 'Create_Timer' %}"> Update </button>`
+      let cancelBtn = `<buttontype="" class="btn btn-danger cancel_btn" type="" formaction="{% url 'Create_Timer' %}"> Cancel </button>`
+      
+      // Change button group
+      let btnGroup = $(`#task_`+taskId+`_btn_group`)
+      let btnGroupBtns = $(`#task_`+taskId+`_btn_group > button`)
+      $(btnGroup).append(updateBtn, cancelBtn)
+      
+      // Hide existing buttons
+      btnGroupBtns.each((index, ele)=> {
+        $(ele).hide()
+      })
+
+      // get currently selected description
+      let desc = descField.text().trim()
+
+      // Replace text with input fields
+      jobCodeField.html(`<input type="text" class="form-control" value="${jobCodeField.text().trim()}"/>`)
+      descField.html(`
+      <select id="descInput" class="form-select" value="${descField.text().trim()}">
+        <option value="Adm">Admin</option>
+        <option value="Des">Design</option>
+        <option value="Doc">Documentation</option>
+        <option value="Dwg">Drawings</option>
+        <option value="Gen">General</option>
+      </select>
+      `)
+      elTime.html(`<input type="text" title="Enter duration in the format: HH:MM:SS" pattern="\d{2}:\d{2}:\d{2}" class="form-control" value="${elTime.text().trim()}"/>`)
+    
+      // select prev description option for user
+      $(`#descInput > option`).each((index, ele) => {
+        if ($(ele).val() === desc) {
+          $(ele).attr("selected", "selected")
+        } 
+      })
+    })
+    
+    // Listen for cancel
+    $(document).on('click', '.cancel_btn', ()=>{
+          location.reload()
+    })
+
+    // Listen for update
+    $(document).on('click', '.cancel_btn', ()=>{
+          location.reload()
+    })
+  });
+  })
+</script> -->
 <script>
+  // Handle timer counting display
   const startBtn = document.getElementById("addTask")
   let seconds = 0
   let isTiming = false
