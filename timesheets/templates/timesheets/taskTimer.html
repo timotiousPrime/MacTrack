@@ -1,186 +1,218 @@
 {% extends 'main/base.html' %}
 
 {% block content %}
-<h1>Welcome to the your Task Timer</h1>
-
-  <table class=" table table-hover">
-    <tbody>
-      <tr>
-        <form method="POST" class="container">
-        {% csrf_token %}
-          <th scope="col">New Task</th>
-          {% for row in taskTimerForm %}
-          <td scope="col">
-            {{ row }}
-          </td>   
-        {% endfor %}
-          <td>
-            <button id="addTask" type="submit" formmethod="POST" formaction="{% url 'Create_Timer' %}" class="btn btn-m btn-primary">Add</button>
-          </td>
-        </form>
-      </tr>
-    </tbody>
-  </table>
-
-<h3>Task History</h3>
-<table class="table table-hover ">
-  <thead>
-    <tr>
-      <th scope="col">Date Created</th>
-      <th scope="col">Job Code</th>
-      <th scope="col">Description</th>
-      <th scope="col">Time Spent</th>
-      <th scope="col"></th>
-    </tr>
-  </thead>
-  <tbody>
-  {% for task in userTasks reversed %}
-    <tr id="task_{{ task.id }}">
-      <td id="date_created_{{ task.id }}" class="col-2 task_created_date" scope="col">
-        {{ task.date_created|date:"d-m-Y" }}
-      </td>
-      <td id="job_code_{{ task.id }}" class="col-3 task_job_code editable" scope="col ">
-        {{ task.job_code }}
-      </td>
-      <td id="description_{{ task.id }}" class="col-3 task_elapsed_time editable" scope="col">
-        {{ task.description }}
-      </td>
-      <td id="elapsed_time_{{ task.id }}" class="col-2 task_elapsed_time editable" id="elapsed_time_display" scope="col">
-        {{ task.elapsed_time }}
-      </td>
-      <td class="col-2" scope="col">
-          <div id="task_{{ task.id }}_btn_group" class=" container btn-group btn-group-sm" role="group" aria-label="Basic mixed styles example">
-            {% if task.is_running == True %}
-            <button type="submit" class="btn btn-secondary pause_btn" type="submit" formaction="{% url 'Stop_Timer' task.id %}"> Pause </button>
-            {% else %}
-            <button type="submit" class="btn btn-success start_btn" type="submit" formaction="{% url 'Start_Timer' task.id %}"> Start </button>
-            <button id="edit_task_{{ task.id }}" data-bs-toggle="modal" data-bs-target="#editModal" type="button" class="btn btn-warning edit_btn" hx-get="{% url 'Edit_Timer' task.id %}" hx-target="#dialog">Edit</button>
-            {% endif %}
-            <button type="submit" class="btn btn-danger delete_btn" type="submit" formaction="{% url 'Delete_Timer' task.id %}">Delete</button>
-          </div>
-      </td>
-    </tr> 
-  {% empty %}
-    <tr>
-      <td colspan="12" >You have no task history</td class="col-12">
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-
-
-<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-  <div id="dialog" class="modal-dialog">
-
-  </div>
-</div>
-
-<!-- <script>
-  // Handle Edit functionality for tasks
-  $(document).ready(() => {
-    $(".edit_btn").each(function() {
-    $(this).click(() => {
-      // event.preventDefault()
-      let btnId = $(this).attr('id')
-      let taskId = btnId.split("_")[2]
-
-      // add form to row 
-      let taskRow = $(`task_${taskId}`)
-
-
-      // Define fields we want to turn into input fields
-      let jobCodeField = $("#job_code_" + taskId)
-      let descField = $("#description_" + taskId)
-      let elTime = $("#elapsed_time_" + taskId)
-
-      // instantiate new edit buttons
-      let updateBtn = `<buttontype="submit" class="btn btn-secondary update_btn" type="submit" formaction="{% url 'Create_Timer' %}"> Update </button>`
-      let cancelBtn = `<buttontype="" class="btn btn-danger cancel_btn" type="" formaction="{% url 'Create_Timer' %}"> Cancel </button>`
-      
-      // Change button group
-      let btnGroup = $(`#task_`+taskId+`_btn_group`)
-      let btnGroupBtns = $(`#task_`+taskId+`_btn_group > button`)
-      $(btnGroup).append(updateBtn, cancelBtn)
-      
-      // Hide existing buttons
-      btnGroupBtns.each((index, ele)=> {
-        $(ele).hide()
-      })
-
-      // get currently selected description
-      let desc = descField.text().trim()
-
-      // Replace text with input fields
-      jobCodeField.html(`<input type="text" class="form-control" value="${jobCodeField.text().trim()}"/>`)
-      descField.html(`
-      <select id="descInput" class="form-select" value="${descField.text().trim()}">
-        <option value="Adm">Admin</option>
-        <option value="Des">Design</option>
-        <option value="Doc">Documentation</option>
-        <option value="Dwg">Drawings</option>
-        <option value="Gen">General</option>
-      </select>
-      `)
-      elTime.html(`<input type="text" title="Enter duration in the format: HH:MM:SS" pattern="\d{2}:\d{2}:\d{2}" class="form-control" value="${elTime.text().trim()}"/>`)
-    
-      // select prev description option for user
-      $(`#descInput > option`).each((index, ele) => {
-        if ($(ele).val() === desc) {
-          $(ele).attr("selected", "selected")
-        } 
-      })
-    })
-    
-    // Listen for cancel
-    $(document).on('click', '.cancel_btn', ()=>{
-          location.reload()
-    })
-
-    // Listen for update
-    $(document).on('click', '.cancel_btn', ()=>{
-          location.reload()
-    })
-  });
-  })
-</script> -->
-<script>
-  // Handle timer counting display
-  const startBtn = document.getElementById("addTask")
-  let seconds = 0
-  let isTiming = false
-  let timer
+<div id="mainContent">
+  <h1>Welcome to the your Task Timer</h1>
+  <!-- Add new task form -->
+  <form method="POST" class="container">
+    {% csrf_token %}
+    <table class=" table table-hover">
+      <tbody>
+        <tr>
+            <th scope="col">New Task</th>
+            {% for row in taskTimerForm %}
+            <td scope="col">
+              {{ row }}
+            </td>   
+            {% endfor %}
+            <td>
+              <button id="addTask" type="submit" formmethod="POST" formaction="{% url 'Create_Timer' %}" class="btn btn-m btn-primary">Add</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
   
+  <h3>Task History</h3>
+  <form method="POST" class="container">
+    {% csrf_token %}
+    <table class="table table-hover ">
+      <thead>
+        <tr>
+          <th scope="col">Date Created</th>
+          <th scope="col">Job Code</th>
+          <th scope="col">Description</th>
+          <th scope="col">Time Spent</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody  hx-target="closest tr" hx-swap="outerHTML ">
+      {% for task in userTasks reversed %}
+        <tr id="task_{{ task.id }}">
+          <td id="date_created_{{ task.id }}" class="col-2 task_created_date" scope="col">
+            {{ task.date_created|date:"d-m-Y" }}
+          </td>
+          <td id="job_code_{{ task.id }}" class="col-3 task_job_code editable" scope="col ">
+            {{ task.job_code }}
+          </td>
+          <td id="description_{{ task.id }}" class="col-3 task_elapsed_time editable" scope="col">
+            {{ task.description }}
+          </td>
+          <td id="elapsed_time_{{ task.id }}" class="col-2 task_elapsed_time editable" id="elapsed_time_display" scope="col">
+            {{ task.elapsed_time }}
+          </td>
+          <td class="col-2" scope="col">
+              <div id="task_{{ task.id }}_btn_group" class="container btn-group btn-group-sm {% if task.is_running %} active {% endif %}" role="group" aria-label="Basic mixed styles example">
+                <button 
+                  id="pause_task_{{ task.id }}" 
+                  class="btn btn-secondary pause_btn" 
+                  hx-post="{% url "Stop_Timer" task.id %}"
+                  hx-swap="none"
+                  > 
+                  Pause 
+                </button>
+                <button 
+                  id="start_task_{{ task.id }}" 
+                  class="btn btn-success start_btn" 
+                  hx-post="{% url "Start_Timer" task.id %}"
+                  hx-swap="none"
+                  > 
+                  Start 
+                </button>
+                <button 
+                  id="edit_task_{{ task.id }}" 
+                  data-bs-toggle="modal" 
+                  data-bs-target="#editModal" 
+                  class="btn btn-warning edit_btn" 
+                  hx-get="{% url 'Edit_Timer' task.id %}" 
+                  hx-target="#dialog"
+                  hx-swap="innerHtml"
+                  >
+                  Edit
+                </button>
+                <button 
+                hx-confirm="Are you sure you want to delete this?" 
+                id="delete_task_{{ task.id }}" 
+                hx-post="{% url "Delete_Timer"  task.id %}" 
+                class="btn btn-danger delete_btn" 
+                >
+                Delete
+              </button>
+              </div>
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="12" >You have no task history</td class="col-12">
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </form>
+  
+  <!-- Modal for edit interface -->
+  <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div id="dialog" class="modal-dialog">
+      <!-- Inject Modal HTML in here -->
+    </div>
+  </div>
+  
+<script>
+  // Handle start/pause button changes
+  let startBtns = $(".start_btn")
+  let pauseBtns = $(".pause_btn")
+  let btnGroups = $(".btn-group")
 
-  function getAccumalatedTime(){
-    let inputTime = document.getElementById("elapsed_time_input").value
-    let parts = inputTime.split(":")
-    seconds += ((+parts[0]*60*60)+(+parts[1]*60)+(+parts[2]))
-  }
+  $(btnGroups).each((index, ele) => {
+    let taskId = ele.id.split("_")[1]
+    let startBtn = $("#start_task_" + taskId)
+    let pauseBtn = $("#pause_task_" + taskId)
+    let editBtn = $("#edit_task_" + taskId)
 
-  function incrementTimer(){
-    seconds++
-    let date = new Date(null)
-    date.setSeconds(seconds)
-    let timeStr = date.toISOString().substr(11,8)
-    let inputTime = document.getElementById('elapsed_time_input').value = timeStr
-  }
-
-  startBtn.addEventListener("click", ()=>{
-    if (isTiming) {
-      // Pause timer
-      isTiming = false
-      startBtn.textContent = "Start"
-      clearInterval(timer)
+    if ($(ele).hasClass("active")) {
+      startBtn.hide()
+      pauseBtn.show()
+      editBtn.hide()
     } else {
-      // Start Timer
-      isTiming = true
-      seconds = 0
-      getAccumalatedTime()
-      startBtn.textContent = "Pause"
-      timer = setInterval(incrementTimer, 1000)
+      startBtn.show()
+      pauseBtn.hide()
     }
+  })
+
+  startBtns.each((index, ele) => {
+    $(ele).click((e)=> {
+      let taskId = e.target.id.split("_")[2]
+      let editBtn = $("#edit_task_" + taskId)
+      let startBtn = $("#start_task_" + taskId)
+      let pauseBtn = $("#pause_task_" + taskId)
+
+      $(startBtn).hide()
+      $(editBtn).hide()
+      $(pauseBtn).show()
+    })
+  })
+  
+  pauseBtns.each((index, ele)=> {
+    $(ele).click((e) => {
+      let taskId = e.target.id.split("_")[2]
+      let editBtn = $("#edit_task_" + taskId)
+      let startBtn = $("#start_task_" + taskId)
+      let pauseBtn = $("#pause_task_" + taskId)
+
+      $(startBtn).show()
+      $(editBtn).show()
+      $(pauseBtn).hide()
+    })
   })
 
 </script>
 
+  <script>
+    // Handle timer counting display
+    const addBtn = document.getElementById("addTask")
+    const startBtn = document.getElementById("start")
+    let seconds = 0
+    let isTiming = false
+    let timer
+    
+  
+    function getAccumalatedTime(){
+      let inputTime = document.getElementById("elapsed_time_input").value
+      let parts = inputTime.split(":")
+      seconds += ((+parts[0]*60*60)+(+parts[1]*60)+(+parts[2]))
+    }
+  
+    function incrementTimer(){
+      seconds++
+      let date = new Date(null)
+      date.setSeconds(seconds)
+      let timeStr = date.toISOString().substr(11,8)
+      let inputTime = document.getElementById('elapsed_time_input').value = timeStr
+    }
+  
+    addBtn.addEventListener("click", ()=>{
+      if (isTiming) {
+        // Pause timer
+        isTiming = false
+        addBtn.textContent = "Start"
+        clearInterval(timer)
+      } else {
+        // Start Timer
+        isTiming = true
+        seconds = 0
+        getAccumalatedTime()
+        addBtn.textContent = "Pause"
+        timer = setInterval(incrementTimer, 1000)
+      }
+    })
+
+    startBtn.addEventListener("click", ()=>{
+      if (isTiming) {
+        // Pause timer
+        isTiming = false
+        startBtn.textContent = "Start"
+        clearInterval(timer)
+      } else {
+        // Start Timer
+        isTiming = true
+        seconds = 0
+        getAccumalatedTime()
+        startBtn.textContent = "Pause"
+        timer = setInterval(incrementTimer, 1000)
+      }
+    })
+  
+  </script>
+
+</div>  
 {% endblock content %}
