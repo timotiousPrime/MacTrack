@@ -30,7 +30,7 @@ def create_task(request):
             task.save()
             return redirect("Task_Timer")
 
-    return redirect("Task_Timer") 
+    return redirect("Task_Timer")
 
 
 def start_timer(request, task_id):
@@ -41,7 +41,7 @@ def start_timer(request, task_id):
         task.date_edited = timezone.now()
         task.save()
         return HttpResponse(status=200)
-    
+
     return redirect("Task_Timer")
 
 
@@ -53,22 +53,21 @@ def stop_timer(request, task_id):
         task.get_elapsed_time()
         task.date_edited = timezone.now()
         task.save()
-        return HttpResponse(status=200)
-    
+        return HttpResponse(task.elapsed_time)
+
     return redirect("Task_Timer")
 
 
 def edit_timer(request, task_id):
-    print("EDIT VIEW CALLED**************")
+    """View is called when a task timers' (tte) edit button has been clicked or when a tte form is submitted"""
     task = TaskTime.objects.get(id=task_id)
     if request.method == "POST":
-        print("******** REQUEST.POST")
         form = Task_Timer_Form(request.POST or None, instance=task)
         if form.is_valid():
             task.date_edited = timezone.now()
-            task.save() 
-            return redirect("Task_Timer")
-    
+            task.save()
+            return render(request, "partials/taskTableRow.html", {"task": task})
+
     if request.method == "GET":
         print("********Getting Edit view********")
         form = Task_Timer_Form(instance=task)
@@ -82,9 +81,9 @@ def edit_timer(request, task_id):
 
 
 def delete_timer(request, task_id):
-    if request.method == "POST":    
+    if request.method == "POST":
         task = TaskTime.objects.get(id=task_id)
         task.delete()
         return HttpResponse(status=200)
-    
+
     return redirect("Task_Timer")
