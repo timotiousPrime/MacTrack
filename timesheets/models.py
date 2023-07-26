@@ -2,7 +2,7 @@ from django.db import models
 
 # Get user
 from django.contrib.auth.models import User
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 
 # Create your models here.
