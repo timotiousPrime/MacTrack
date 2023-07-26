@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404, get_list_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
 from django.contrib.auth.models import User
 from .models import TaskTime
 from timesheets.forms import Task_Timer_Form
@@ -8,7 +8,6 @@ from django.utils import timezone
 # Create your views here.
 def task_timer(request):
     user = get_object_or_404(User, username=request.user.username)
-    # user_task_times = get_list_or_404(TaskTime, user=request.user.id)
     user_tasks = list(TaskTime.objects.filter(user=request.user.id))
 
     context = {
@@ -21,7 +20,6 @@ def task_timer(request):
 
 
 def create_task(request):
-    user = get_object_or_404(User, username=request.user.username)
     if request.method == "POST":
         form = Task_Timer_Form(request.POST)
         if form.is_valid():
@@ -30,14 +28,9 @@ def create_task(request):
             task.time_started = timezone.now()
             task.is_running = True
             task.save()
-
             return redirect("Task_Timer")
 
-    context = {
-        "user": user,
-        "taskTimerForm": Task_Timer_Form,
-    }
-    return render(request, "timesheets/taskTimer.html", context)
+    return redirect("Task_Timer") 
 
 
 def start_timer(request, task_id):
@@ -47,16 +40,9 @@ def start_timer(request, task_id):
         task.time_started = timezone.now()
         task.date_edited = timezone.now()
         task.save()
-        return redirect("Task_Timer")
+        return HttpResponse(status=200)
     
-    user = request.user
-    userTasks = TaskTime.objects.filter(user=user)
-    context = {
-        "taskTimerForm": Task_Timer_Form,
-        "user": user,
-        "userTasks": userTasks
-    }
-    return render(request, "timesheets/taskTimer.html", context)
+    return redirect("Task_Timer")
 
 
 def stop_timer(request, task_id):
@@ -67,16 +53,9 @@ def stop_timer(request, task_id):
         task.get_elapsed_time()
         task.date_edited = timezone.now()
         task.save()
-        return redirect("Task_Timer")
+        return HttpResponse(status=200)
     
-    user = request.user
-    userTasks = TaskTime.objects.filter(user=user)
-    context = {
-        "taskTimerForm": Task_Timer_Form,
-        "user": user,
-        "userTasks": userTasks
-    }
-    return render(request, "timesheets/taskTimer.html", context)
+    return redirect("Task_Timer")
 
 
 def edit_timer(request, task_id):
@@ -99,27 +78,13 @@ def edit_timer(request, task_id):
         }
         return render(request, "timesheets/edit.html", context)
 
-    user = request.user
-    userTasks = TaskTime.objects.filter(user=user)
-    context = {
-        "taskTimerForm": Task_Timer_Form,
-        "user": user,
-        "userTasks": userTasks
-    }
-    return render(request, "timesheets/taskTimer.html", context)
+    return redirect("Task_Timer")
 
 
 def delete_timer(request, task_id):
     if request.method == "POST":    
         task = TaskTime.objects.get(id=task_id)
         task.delete()
-        return redirect("Task_Timer")
-
-    user = request.user
-    userTasks = TaskTime.objects.filter(user=user)
-    context = {
-        "taskTimerForm": Task_Timer_Form,
-        "user": user,
-        "userTasks": userTasks
-    }
-    return render(request, "timesheets/taskTimer.html", context)
+        return HttpResponse(status=200)
+    
+    return redirect("Task_Timer")
