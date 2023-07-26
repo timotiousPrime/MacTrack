@@ -18,7 +18,9 @@
             hx-target="#body" 
             hx-swap="innerHtml" 
             data-bs-dismiss="modal" 
-            hx-post="{% url "Edit_Timer" task.id %}"
+            hx-post="{% url 'Edit_Timer' task.id %}"
+            hx-target="#task_table"
+            hx-swap="innerHTML"
         >
             Save changes
         </button>
