@@ -9,7 +9,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 </head>
-<body style="border: 1px solid black;" class="container-fluid g-0 vh-100">
+<body id="body" style="border: 1px solid black;" class="container-fluid g-0 vh-100">
     <div class="nav">
         {% include "main/navbar.html" %}
     </div>
@@ -20,7 +20,7 @@
                     {% include 'main/sideMenu.html' %}
                 </div>
             </div>
-            <div class="col-10 bg-light" >
+            <div id="content" class="col-10 bg-light" >
                 {% block content %}
                 {% endblock content %}
             </div>
