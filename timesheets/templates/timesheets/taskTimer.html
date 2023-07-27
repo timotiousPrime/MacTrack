@@ -58,11 +58,29 @@
   </div>
   
 <script>
+  $(window).on('resize', updateBtns)
   // Handle start/pause button changes
   let startBtns = $(".start_btn")
   let pauseBtns = $(".pause_btn")
   let btnGroups = $(".btn-group")
 
+  function updateBtns(){
+    $(btnGroups).each((index, ele) => {
+    let taskId = ele.id.split("_")[1]
+    let startBtn = $("#start_task_" + taskId)
+    let pauseBtn = $("#pause_task_" + taskId)
+    let editBtn = $("#edit_task_" + taskId)
+
+    if ($(ele).hasClass("active")) {
+      startBtn.hide()
+      pauseBtn.show()
+      editBtn.hide()
+    } else {
+      startBtn.show()
+      pauseBtn.hide()
+    }
+  })
+  }
   $(btnGroups).each((index, ele) => {
     let taskId = ele.id.split("_")[1]
     let startBtn = $("#start_task_" + taskId)
