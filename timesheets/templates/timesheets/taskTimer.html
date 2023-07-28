@@ -38,9 +38,7 @@
       </thead>
       <tbody id="task_table" hx-target="closest tr" hx-swap="outerHTML ">
       {% for task in userTasks reversed %}
-      <tr id="task_{{ task.id }}">
         {% include "partials/taskTableRow.html" %}
-      </tr>
       {% empty %}
         <tr>
           <td colspan="12" >You have no task history</td class="col-12">
