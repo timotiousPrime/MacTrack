@@ -21,4 +21,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('main.urls')),
     path('users/', include('members.urls')),
+    path('taskTimer/', include('timesheets.urls')),
+    path('reports/', include('reports.urls')),
 ]

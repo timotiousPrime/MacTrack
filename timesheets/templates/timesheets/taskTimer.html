@@ -1,0 +1,184 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<div id="mainContent">
+  <h1>Welcome to the your Task Timer</h1>
+  <!-- Add new task form -->
+  <form method="POST" class="container">
+    {% csrf_token %}
+    <table class=" table table-hover">
+      <tbody>
+        <tr>
+            <th scope="col">New Task</th>
+            {% for row in taskTimerForm %}
+            <td scope="col">
+              {{ row }}
+            </td>   
+            {% endfor %}
+            <td>
+              <button id="addTask" type="submit" formmethod="POST" formaction="{% url 'Create_Timer' %}" class="btn btn-m btn-primary">Add</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+  
+  <h3>Task History</h3>
+  <form method="POST" class="container">
+    {% csrf_token %}
+    <table class="table table-hover ">
+      <thead>
+        <tr>
+          <th scope="col">Date Created</th>
+          <th scope="col">Job Code</th>
+          <th scope="col">Description</th>
+          <th scope="col">Time Spent</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody id="task_table" hx-target="closest tr" hx-swap="outerHTML ">
+      {% for task in userTasks reversed %}
+        {% include "partials/taskTableRow.html" %}
+      {% empty %}
+        <tr>
+          <td colspan="12" >You have no task history</td class="col-12">
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </form>
+  
+  <!-- Modal for edit interface -->
+  <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div id="dialog" class="modal-dialog">
+      <!-- Inject Modal HTML in here -->
+    </div>
+  </div>
+  
+<script>
+  $(window).on('resize', updateBtns)
+  // Handle start/pause button changes
+  let startBtns = $(".start_btn")
+  let pauseBtns = $(".pause_btn")
+  let btnGroups = $(".btn-group")
+
+  function updateBtns(){
+    $(btnGroups).each((index, ele) => {
+    let taskId = ele.id.split("_")[1]
+    let startBtn = $("#start_task_" + taskId)
+    let pauseBtn = $("#pause_task_" + taskId)
+    let editBtn = $("#edit_task_" + taskId)
+
+    if ($(ele).hasClass("active")) {
+      startBtn.hide()
+      pauseBtn.show()
+      editBtn.hide()
+    } else {
+      startBtn.show()
+      pauseBtn.hide()
+    }
+  })
+  }
+  $(btnGroups).each((index, ele) => {
+    let taskId = ele.id.split("_")[1]
+    let startBtn = $("#start_task_" + taskId)
+    let pauseBtn = $("#pause_task_" + taskId)
+    let editBtn = $("#edit_task_" + taskId)
+
+    if ($(ele).hasClass("active")) {
+      startBtn.hide()
+      pauseBtn.show()
+      editBtn.hide()
+    } else {
+      startBtn.show()
+      pauseBtn.hide()
+    }
+  })
+
+  startBtns.each((index, ele) => {
+    $(ele).click((e)=> {
+      let taskId = e.target.id.split("_")[2]
+      let editBtn = $("#edit_task_" + taskId)
+      let startBtn = $("#start_task_" + taskId)
+      let pauseBtn = $("#pause_task_" + taskId)
+
+      $(startBtn).hide()
+      $(editBtn).hide()
+      $(pauseBtn).show()
+    })
+  })
+  
+  pauseBtns.each((index, ele)=> {
+    $(ele).click((e) => {
+      let taskId = e.target.id.split("_")[2]
+      let editBtn = $("#edit_task_" + taskId)
+      let startBtn = $("#start_task_" + taskId)
+      let pauseBtn = $("#pause_task_" + taskId)
+
+      $(startBtn).show()
+      $(editBtn).show()
+      $(pauseBtn).hide()
+    })
+  })
+
+</script>
+
+  <script>
+    // Handle timer counting display
+    const addBtn = document.getElementById("addTask")
+    const startBtn = document.getElementById("start")
+    let seconds = 0
+    let isTiming = false
+    let timer
+    
+  
+    function getAccumalatedTime(){
+      let inputTime = document.getElementById("elapsed_time_input").value
+      let parts = inputTime.split(":")
+      seconds += ((+parts[0]*60*60)+(+parts[1]*60)+(+parts[2]))
+    }
+  
+    function incrementTimer(){
+      seconds++
+      let date = new Date(null)
+      date.setSeconds(seconds)
+      let timeStr = date.toISOString().substr(11,8)
+      let inputTime = document.getElementById('elapsed_time_input').value = timeStr
+    }
+  
+    addBtn.addEventListener("click", ()=>{
+      if (isTiming) {
+        // Pause timer
+        isTiming = false
+        addBtn.textContent = "Start"
+        clearInterval(timer)
+      } else {
+        // Start Timer
+        isTiming = true
+        seconds = 0
+        getAccumalatedTime()
+        addBtn.textContent = "Pause"
+        timer = setInterval(incrementTimer, 1000)
+      }
+    })
+
+    startBtn.addEventListener("click", ()=>{
+      if (isTiming) {
+        // Pause timer
+        isTiming = false
+        startBtn.textContent = "Start"
+        clearInterval(timer)
+      } else {
+        // Start Timer
+        isTiming = true
+        seconds = 0
+        getAccumalatedTime()
+        startBtn.textContent = "Pause"
+        timer = setInterval(incrementTimer, 1000)
+      }
+    })
+  
+  </script>
+
+</div>  
+{% endblock content %}

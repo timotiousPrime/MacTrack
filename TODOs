@@ -1,1 +1,16 @@
-Create user profile
+Create user profile - DONE***
+Create Task Timer, link it to users. - DONE***
+Fix logout bug - DONE***
+Create template for task timer. Make it only show current users task history - DONE***
+Finish Template outline and functionality - DONE***
+Add view to see task time data - DONE***
+Fix edit bug, finished edit returns a single line only - DONE***
+show time ticking when timer is running
+
+Show Task Timer data as charts:
+Time per Job Code Bar Graph
+Per Job Code, Users Time
+
+Report Types:
+Per Job: x - job section, y - time, stacked - job type, nest - employee, filter - employee
+All jobs: x - job code, y - time, stacked - job section, filter - year

@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'main',
     'members',
     'timesheets',
+    'reports',
+    'projects',
 ]
 
 MIDDLEWARE = [
