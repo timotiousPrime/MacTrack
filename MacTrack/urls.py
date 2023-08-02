@@ -23,4 +23,5 @@ urlpatterns = [
     path('users/', include('members.urls')),
     path('taskTimer/', include('timesheets.urls')),
     path('reports/', include('reports.urls')),
+    path('projects/', include('projects.urls')),
 ]
