@@ -6,6 +6,11 @@ from datetime import timedelta
 
 
 # Create your models here.
+class Ancillary_Job_Codes(models.Model):
+    code = models.CharField(max_length=4)
+    description = models.CharField(max_length=42)
+
+
 class TaskTime(models.Model):
     JOB_DESCRIPTIONS = [
         ("Adm", "Admin"),
@@ -18,6 +23,7 @@ class TaskTime(models.Model):
     job_code = models.CharField(
         max_length=16, null=False, blank=False
     )
+    ancillary_code = models.ForeignKey(Ancillary_Job_Codes, null=True, blank=True, on_delete=models.SET_NULL)
     description = models.CharField(
         max_length=3, default="Gen", choices=JOB_DESCRIPTIONS, null=False, blank=False
     )
