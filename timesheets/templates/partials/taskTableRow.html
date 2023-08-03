@@ -2,10 +2,13 @@
     <td id="date_created_{{ task.id }}" class="col-2 task_created_date" scope="col">
       {{ task.date_created|date:"d-m-Y" }}
     </td>
-    <td id="job_code_{{ task.id }}" class="col-3 task_job_code editable" scope="col ">
+    <td id="job_code_{{ task.id }}" class="col-2 task_job_code editable" scope="col ">
       {{ task.job_code }}
     </td>
-    <td id="description_{{ task.id }}" class="col-3 task_elapsed_time editable" scope="col">
+    <td id="ancillary_job_code_{{ task.id }}" class="col-2 task_ancillary_job_code editable" scope="col ">
+      {{ task.ancillary_code }}
+    </td>
+    <td id="description_{{ task.id }}" class="col-2 task_elapsed_time editable" scope="col">
       {{ task.description }}
     </td>
     <td id="elapsed_time_{{ task.id }}" class="col-2" scope="col">
