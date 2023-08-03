@@ -6,16 +6,22 @@ from django.utils import timezone
 class Task_Timer_Form(forms.ModelForm):
     class Meta:
         model = TaskTime
-        fields = ("job_code", "description", "elapsed_time")
+        fields = ("job_code", "ancillary_code", "description", "elapsed_time")
 
         widgets = {
-            "job_code": forms.TextInput(
+            "job_code": forms.Select(
                 attrs={
-                    "class": "form-control",
+                    "class": "form-select",
                     "placeholder": "Job Code",
                 }
             ),
             "description": forms.Select(attrs={"class": "form-select"}),
+            "ancillary_code": forms.Select(
+                attrs={
+                    "class": "form-select",
+                    "placeholder": "Ancillary Code",
+                }
+            ),
             "elapsed_time": forms.TextInput(
                 attrs={
                     "class": "form-control",
