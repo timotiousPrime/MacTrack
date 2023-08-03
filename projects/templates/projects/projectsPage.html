@@ -3,6 +3,33 @@
 {% block content %}
 
 <h1>Projects</h1>
-<p>{{ greeting }}</p>
+
+<span class="addProject">
+    <button 
+        id="addProject" 
+        class="btn btn-m btn-primary"
+        type="button"
+        data-bs-toggle="modal" 
+        data-bs-target="#addProjectModal" 
+        hx-get="{% url 'Create_Project' %}" 
+        hx-target="#dialog"
+        hx-swap="innerHtml"
+        >
+        New Project
+    </button>
+</span>
+
+<div class="projectTable">
+    {% include 'partials/projectsTable.html' %}
+</div>
+
+  
+  <!-- Modal for New Project interface -->
+    <div class="modal fade" id="addProjectModal" tabindex="-1" aria-labelledby="addProjectModalLabel" aria-hidden="true">
+    <div id="dialog" class="modal-dialog">
+      <!-- Inject Modal HTML in here -->
+    </div>
+  </div>
+  
 
 {% endblock content %}
