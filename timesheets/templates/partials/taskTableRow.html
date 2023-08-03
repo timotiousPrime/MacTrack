@@ -9,7 +9,7 @@
       {{ task.ancillary_code }}
     </td>
     <td id="description_{{ task.id }}" class="col-2 task_elapsed_time editable" scope="col">
-      {{ task.description }}
+      {{ task.get_description_display }}
     </td>
     <td id="elapsed_time_{{ task.id }}" class="col-2" scope="col">
       {{ task.elapsed_time }}
