@@ -1,0 +1,57 @@
+<tr id="project_{{ project.id }}">
+    <td id="job_code_{{ project.id }}" class="col-2 project_job_code editable" scope="col ">
+      {{ project.job_code }}
+    </td>
+    <td id="customer_{{ project.id }}" class="col-2 project_customer editable" scope="col ">
+      {{ project.customer }}
+    </td>
+    <td id="description_{{ project.id }}" class="col-2 project_description editable" scope="col ">
+      {{ project.description }}
+    </td>
+    <td id="status_{{ project.id }}" class="col-2 project_status editable" scope="col ">
+      {{ project.get_status_display }}
+    </td>
+    <td id="captains_{{ project.id }}" class="col-2 project_captains editable" scope="col ">
+        {% for captain in project.project_captains.all %}
+            {% if not forloop.first %}, {% endif %}
+            {{ captain.username }}
+        {% endfor %}
+    </td>
+    <td id="purchase_order_number_{{ project.id }}" class="col-2 project_purchase_order_number editable" scope="col ">
+      {{ project.purchase_order_number }}
+    </td>
+    <td id="date_created_{{ project.id }}" class="col-2 project_created_date" scope="col">
+      {{ project.date_created|date:"d-m-Y" }}
+    </td>
+    <td id="delivery_date_{{ project.id }}" class="col-2 project_delivery_date" scope="col">
+      {{ project.delivery_date|date:"d-m-Y" }}
+    </td>
+    <td id="days_due_{{ project.id }}" class="col-2 project_days_due" scope="col">
+      {{ project.days_due|date:"d-m-Y" }}
+    </td>
+    <!-- <td class="col-2" scope="col">
+        <div id="project_{{ project.id }}_btn_group" class="container btn-group btn-group-sm {% if project.is_running %} active {% endif %}" role="group" aria-label="Basic mixed styles example">
+          <button 
+            id="start_project_{{ project.id }}" 
+            class="btn btn-success start_btn" 
+            > 
+            Start 
+          </button>
+          <button 
+            id="edit_project_{{ project.id }}" 
+            data-bs-toggle="modal" 
+            data-bs-target="#editModal" 
+            class="btn btn-warning edit_btn" 
+            >
+            Edit
+          </button>
+          <button 
+          hx-confirm="Are you sure you want to delete this?" 
+          id="delete_project_{{ project.id }}" 
+          class="btn btn-danger delete_btn" 
+          >
+          Delete
+        </button>
+        </div>
+    </td> -->
+</tr>
