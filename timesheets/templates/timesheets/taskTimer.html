@@ -16,7 +16,15 @@
             </td>   
             {% endfor %}
             <td>
-              <button id="addTask" type="submit" formmethod="POST" formaction="{% url 'Create_Timer' %}" class="btn btn-m btn-primary">Add</button>
+              <button 
+              id="addTask" 
+              type="submit" 
+              formmethod="POST" 
+              formaction="{% url 'Create_Timer' %}" 
+              class="btn btn-m btn-primary"
+              >
+              Add
+            </button>
             </td>
           </tr>
         </tbody>
