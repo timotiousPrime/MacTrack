@@ -9,10 +9,10 @@ class ProjectForm(forms.ModelForm):
         fields = (
             "job_code", 
             "customer", 
+            "purchase_order_number",
             "description", 
             "is_high_priority", 
             "project_captains", 
-            "purchase_order_number"
         )
 
         widgets = {
