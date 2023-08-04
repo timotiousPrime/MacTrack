@@ -37,9 +37,12 @@
 
 
 <script>
-    $(document).ready(function() {
+    $(document).on('htmx:afterOnLoad', function() {
         // Initialize Select2 on your project_captains field
-        $('.select2').select2();
+        $('.select2').select2({
+            dropdownParent: $('#addProjectModal'),
+            width: '100%'
+        });
     });
     </script>
 
