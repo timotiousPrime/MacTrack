@@ -7,13 +7,16 @@ from django.utils import timezone
 
 # Create your views here.
 def task_timer(request):
+    today = timezone.localdate()
     user = get_object_or_404(User, username=request.user.username)
     user_tasks = list(TaskTime.objects.filter(user=request.user.id))
+    todays_tasks = TaskTime.objects.filter(date_created__date=today)
 
     context = {
         "user": user,
         "taskTimerForm": Task_Timer_Form,
         "userTasks": user_tasks,
+        "todays_tasks": todays_tasks,
     }
 
     return render(request, "timesheets/taskTimer.html", context)
@@ -32,6 +35,17 @@ def create_task(request):
 
     return redirect("Task_Timer")
 
+
+def update_ongoing(request, task_id):
+    task = TaskTime.objects.get(id=task_id)
+    if request.method == "POST":
+        if task.is_ongoing:
+            task.is_ongoing = False
+            task.save()
+        else:
+            task.is_ongoing = True
+            task.save()
+    return HttpResponse(status=204)
 
 def start_timer(request, task_id):
     if request.method == "POST":
