@@ -42,11 +42,12 @@
           <th scope="col">Ancillary Code</th>
           <th scope="col">Description</th>
           <th scope="col">Time Spent</th>
+          <th scope="col">Ongoing</th>
           <th scope="col">Actions</th>
         </tr>
       </thead>
       <tbody id="task_table" hx-target="closest tr" hx-swap="outerHTML ">
-      {% for task in userTasks reversed %}
+      {% for task in todays_tasks reversed %}
         {% include "partials/taskTableRow.html" %}
       {% empty %}
         <tr>
