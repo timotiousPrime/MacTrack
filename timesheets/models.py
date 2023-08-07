@@ -47,6 +47,7 @@ class TaskTime(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_edited = models.DateTimeField(auto_now=True)
     is_running = models.BooleanField(default=False)
+    is_ongoing = models.BooleanField(default=True)
 
     def __str__(self) -> str:
         return str(self.job_code) + ": " + str(self.elapsed_time)
