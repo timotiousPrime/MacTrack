@@ -14,6 +14,20 @@
     <td id="elapsed_time_{{ task.id }}" class="col-2" scope="col">
       {{ task.elapsed_time }}
     </td>
+    <td id="is_ongoing_{{ task.id }}" class="col-1" scope="col">
+      <div class="form-check form-switch">
+        <input 
+        role="switch" 
+        class="form-check-input" 
+        type="checkbox" 
+        {% if task.is_ongoing %} checked {% endif %}
+        id="is_ongoing_{{ task.id }}"
+        hx-post="{% url 'Update_Ongoing' task.id %}"
+        hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+        hx-trigger="change"
+        >
+      </div>
+    </td>
     <td class="col-2" scope="col">
         <div id="task_{{ task.id }}_btn_group" class="container btn-group btn-group-sm {% if task.is_running %} active {% endif %}" role="group" aria-label="Basic mixed styles example">
           <button 
