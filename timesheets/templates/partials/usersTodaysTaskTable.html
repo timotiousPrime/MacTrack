@@ -1,0 +1,25 @@
+<form method="POST" class="container">
+    {% csrf_token %}
+    <table class="table table-hover ">
+        <thead>
+            <tr>
+            <th scope="col">Date Created</th>
+            <th scope="col">Job Code</th>
+            <th scope="col">Ancillary Code</th>
+            <th scope="col">Description</th>
+            <th scope="col">Time Spent</th>
+            <th scope="col">Ongoing</th>
+            <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody id="task_table" hx-target="closest tr" hx-swap="outerHTML ">
+        {% for task in todays_tasks reversed %}
+            {% include "partials/taskTableRow.html" %}
+        {% empty %}
+            <tr>
+            <td colspan="12" >You have no task history</td class="col-12">
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</form>
