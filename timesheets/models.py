@@ -1,9 +1,9 @@
 from django.db import models
 from projects.models import Project
+from datetime import timedelta
 
 # Get user
 from django.contrib.auth.models import User
-from datetime import timedelta
 
 
 # Create your models here.
@@ -11,8 +11,11 @@ class AncillaryJobCode(models.Model):
     code = models.CharField(max_length=4, primary_key=True)
     description = models.CharField(max_length=42)
 
+    class Meta:
+        ordering = ['code']
+
     def __str__(self):
-        return self.code
+        return self.code + ": " + self.description
     
 
 class TaskTime(models.Model):
