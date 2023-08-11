@@ -1,11 +1,23 @@
 from django.db import models
+from projects.models import Project
+from datetime import timedelta
 
 # Get user
 from django.contrib.auth.models import User
-from datetime import timedelta
 
 
 # Create your models here.
+class AncillaryJobCode(models.Model):
+    code = models.CharField(max_length=4, primary_key=True)
+    description = models.CharField(max_length=42)
+
+    class Meta:
+        ordering = ['code']
+
+    def __str__(self):
+        return self.code + ": " + self.description
+    
+
 class TaskTime(models.Model):
     JOB_DESCRIPTIONS = [
         ("Adm", "Admin"),
@@ -15,8 +27,18 @@ class TaskTime(models.Model):
         ("Gen", "General"),
     ]
 
-    job_code = models.CharField(
-        max_length=16, null=False, blank=False
+    job_code = models.ForeignKey(
+        Project, 
+        null=False, 
+        blank=False,
+        on_delete=models.PROTECT,
+        limit_choices_to={"is_active": True}
+    )
+    ancillary_code = models.ForeignKey(
+        AncillaryJobCode,  
+        null=True, 
+        blank=True, 
+        on_delete=models.SET_NULL
     )
     description = models.CharField(
         max_length=3, default="Gen", choices=JOB_DESCRIPTIONS, null=False, blank=False
@@ -28,9 +50,10 @@ class TaskTime(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_edited = models.DateTimeField(auto_now=True)
     is_running = models.BooleanField(default=False)
+    is_ongoing = models.BooleanField(default=True)
 
     def __str__(self) -> str:
-        return self.job_code + ": " + str(self.elapsed_time)
+        return str(self.job_code) + ": " + str(self.elapsed_time)
 
     def get_elapsed_time(self):
         """Get elapsed time of task"""

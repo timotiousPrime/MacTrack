@@ -16,37 +16,24 @@
             </td>   
             {% endfor %}
             <td>
-              <button id="addTask" type="submit" formmethod="POST" formaction="{% url 'Create_Timer' %}" class="btn btn-m btn-primary">Add</button>
+              <button 
+              id="addTask" 
+              type="submit" 
+              formmethod="POST" 
+              formaction="{% url 'Create_Timer' %}" 
+              class="btn btn-m btn-primary"
+              >
+              Add
+            </button>
             </td>
           </tr>
         </tbody>
       </table>
     </form>
-  
-  <h3>Task History</h3>
-  <form method="POST" class="container">
-    {% csrf_token %}
-    <table class="table table-hover ">
-      <thead>
-        <tr>
-          <th scope="col">Date Created</th>
-          <th scope="col">Job Code</th>
-          <th scope="col">Description</th>
-          <th scope="col">Time Spent</th>
-          <th scope="col"></th>
-        </tr>
-      </thead>
-      <tbody id="task_table" hx-target="closest tr" hx-swap="outerHTML ">
-      {% for task in userTasks reversed %}
-        {% include "partials/taskTableRow.html" %}
-      {% empty %}
-        <tr>
-          <td colspan="12" >You have no task history</td class="col-12">
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </form>
+    
+  <div id="todaysTasks">
+    {% include "partials/usersTodaysTaskTable.html" %}
+  </div>
   
   <!-- Modal for edit interface -->
   <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
@@ -57,12 +44,14 @@
   
 <script>
   $(window).on('resize', updateBtns)
+  document.body.addEventListener('htmx:afterOnLoad', updateBtns)
   // Handle start/pause button changes
   let startBtns = $(".start_btn")
   let pauseBtns = $(".pause_btn")
   let btnGroups = $(".btn-group")
 
   function updateBtns(){
+    console.log("this is working!!!!!!!")
     $(btnGroups).each((index, ele) => {
     let taskId = ele.id.split("_")[1]
     let startBtn = $("#start_task_" + taskId)
