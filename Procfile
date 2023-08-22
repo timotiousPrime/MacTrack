@@ -1,1 +1,1 @@
-web: gunicorn MacTracj.wsgi
+web: gunicorn MacTrack.wsgi
