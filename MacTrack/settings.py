@@ -1,10 +1,3 @@
-import os
-import django_heroku
-import dj_database_url
-
-
-
-
 """
 Django settings for MacTrack project.
 
@@ -27,16 +20,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 SECRET_KEY = 'django-insecure-u_xgi1isx9(w)vp8bs*v9_ax2r&q3vg*imam#sugid29f&iump'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-# DEBUG = False
 
 ALLOWED_HOSTS = []
-# ALLOWED_HOSTS = ['evening-shore-46569-0cd8556ecf85.herokuapp.com', 
-#                  '127.0.0.1']
 
 
 # Application definition
@@ -54,11 +43,6 @@ INSTALLED_APPS = [
     'reports',
     'projects',
 ]
-
-# CSRF_COOKIE_SECURE = True 
-# SESSION_COOKIE_SECURE = True
-# SECURE_SSL_REDIRECT = True
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -121,6 +105,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -131,6 +116,7 @@ TIME_ZONE = 'Africa/Johannesburg'
 USE_I18N = True
 
 USE_TZ = True
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
