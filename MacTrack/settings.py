@@ -1,6 +1,7 @@
 import os
 import django_heroku
 import dj_database_url
+from decouple import config
 
 
 
@@ -27,14 +28,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+# SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+SECRET_KEY = 'django-insecure-u_xgi1isx9(w)vp8bs*v9_ax2r&q3vg*imam#sugid29f&iump'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
-DEBUG = False
+DEBUG = True
+# DEBUG = False
 
-ALLOWED_HOSTS = ['evening-shore-46569-0cd8556ecf85.herokuapp.com', 
-                 '127.0.0.1']
+ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['evening-shore-46569-0cd8556ecf85.herokuapp.com', 
+#                  '127.0.0.1']
 
 
 # Application definition
@@ -53,9 +56,9 @@ INSTALLED_APPS = [
     'projects',
 ]
 
-CSRF_COOKIE_SECURE = True 
-SESSION_COOKIE_SECURE = True
-SECURE_SSL_REDIRECT = True
+# CSRF_COOKIE_SECURE = True 
+# SESSION_COOKIE_SECURE = True
+# SECURE_SSL_REDIRECT = True
 
 
 MIDDLEWARE = [
