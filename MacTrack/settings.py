@@ -97,24 +97,24 @@ WSGI_APPLICATION = 'MacTrack.wsgi.application'
 #     }
 # }
 
-# DATABASES = {
-#         "default": dj_database_url.config(
-#             conn_max_age=600,
-#             conn_health_checks=True,
-#             ssl_require=True,
-#         ),
-#     }
-
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "mydatabase",
-        "USER": "wtasobjxdyhorf",
-        "PASSWORD": os.environ.get('DB_KEY'),
-        "HOST": "ec2-44-215-1-253.compute-1.amazonaws.com",
-        "PORT": "5432",
+        "default": dj_database_url.config(
+            conn_max_age=600,
+            conn_health_checks=True,
+            ssl_require=True,
+        ),
     }
-}
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": "mydatabase",
+#         "USER": "wtasobjxdyhorf",
+#         "PASSWORD": os.environ.get('DB_KEY'),
+#         "HOST": "ec2-44-215-1-253.compute-1.amazonaws.com",
+#         "PORT": "5432",
+#     }
+# }
 
 # postgres://wtasobjxdyhorf:dd0312fd5b90ba61ddf6dc4ea120dbc8857c5cd96d43c3f767fbd630bedddb7c@ec2-44-215-1-253.compute-1.amazonaws.com:5432/d3f1bhroonsuu4
 
