@@ -1,6 +1,7 @@
 import os
 import django_heroku
 import dj_database_url
+import secrets
 
 from pathlib import Path
 
@@ -12,7 +13,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = os.environ.get('SECRET_KEY',
+                            default=secrets.token_urlsafe(nbytes=64),)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
