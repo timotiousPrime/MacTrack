@@ -5,8 +5,12 @@ import secrets
 
 from pathlib import Path
 
+from decouple import Config, Csv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+config = Config(os.path.join(BASE_DIR, '.env'))
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -77,9 +81,23 @@ WSGI_APPLICATION = 'MacTrack.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-import dj_database_url
+# db_from_env = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
-db_from_env = dj_database_url.config(conn_max_age=600, ssl_require=True)
+DATABASES = {
+    "default": dj_database_url.config(
+        default=config('DATABASE_URL', default='postgres://postgres:password@localhost:5432/MacTrack'),
+        conn_max_age=600,
+        ssl_require=True,
+    )
+}
+
+# DATABASES = {
+#     "default": dj_database_url.config(
+#         default=os.environ.get('DATABASE_URL', 'postgres://postgres:password@localhost:5432/MacTrack'),
+#         conn_max_age=600,
+#         ssl_require=True
+#     )
+# }
 
 # DATABASES = {
 #     'default': {
@@ -87,18 +105,21 @@ db_from_env = dj_database_url.config(conn_max_age=600, ssl_require=True)
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "MacTrack",
-        "USER": "postgres",
-        "PASSWORD": 'password',
-        "HOST": "localhost",
-        "PORT": "5432",
-    }
-}
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": "MacTrack",
+#         "USER": "postgres",
+#         "PASSWORD": 'password',
+#         "HOST": "localhost",
+#         "PORT": "5432",
+#     }
+# }
 
-DATABASES['default'].update(db_from_env)
+'postgres://postgres:password@localhost:5432/MacTrack'
+
+
+# DATABASES['default'].update(db_from_env)
 
 # DATABASES = {
 #         "default": dj_database_url.config(
@@ -157,3 +178,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 django_heroku.settings(locals())
+
+LOGIN_URL = '/login/'
