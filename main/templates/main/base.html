@@ -1,4 +1,4 @@
-
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,34 +6,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'main/css/styles.css' %}">
     <title>MacTrack</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.bokeh.org/bokeh/release/bokeh-3.2.1.min.js"></script>
     <script src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-3.2.1.min.js"></script>
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+
 </head>
-<body id="body" style="border: 1px solid black;" class="container-fluid g-0 vh-100">
-    <div class="nav">
-        {% include "main/navbar.html" %}
-    </div>
-    <div class="container-fluid g-0 " >
-        <div class="row container-fluid g-0 vh-100"  >
-            <div class="col-2  bg-dark">
-                <div class="sideMenu mh-100 g-0">
-                    {% include 'main/sideMenu.html' %}
-                </div>
-            </div>
-            <div id="content" class="col-10 bg-light" >
-                {% block content %}
-                {% endblock content %}
-            </div>
+<body id="body" class="sb-nav-fixed">
+    <!-- ########## Navbar ########## -->
+    {% include "partials/navbar.html" %}
+    <!-- ########## End Navbar ########## -->
+
+    <!-- ########## Body ########## -->
+    <div id="layoutSidenav" >
+        <!-- ########## Side Navbar ########## -->
+        <div id="layoutSidenav_nav">
+            {% include 'partials/sideMenu.html' %}
         </div>
+        <!-- ########## End Side Navbar ########## -->
+        <!-- ########## Content ########## -->
+        <div id="layoutSidenav_content">
+            {% block content %}
+            {% endblock content %}
+        </div>
+        <!-- ########## End Content ########## -->
+
     </div>
     {% block footer %}
     {% endblock footer %}
+
+    <!-- End Body -->
 </body>
 <script src="https://unpkg.com/htmx.org@1.9.3"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<script src="{% static 'main/js/scripts.js' %}"></script>
+<script src="{% static 'main/js/timer.js' %}"></script>
 
 
 <script>
