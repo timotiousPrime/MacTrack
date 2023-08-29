@@ -6,7 +6,8 @@ $(window).on('resize', updateBtns)
     let btnGroups = $(".btn-group")
   
     function updateBtns(){
-      console.log("this is working!!!!!!!")
+      console.log("this is working!pppppppp!!!!!!")
+      console.log("Script running from static folder in main")
       $(btnGroups).each((index, ele) => {
       let taskId = ele.id.split("_")[1]
       let startBtn = $("#start_task_" + taskId)
