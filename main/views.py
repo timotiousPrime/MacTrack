@@ -15,7 +15,6 @@ def login_page(request):
     if request.method == "POST":
         username = request.POST["username"]
         password = request.POST["password"]
-        print(password)
         user = authenticate(request, username=username, password=password)
         if user is None:
             context = {
