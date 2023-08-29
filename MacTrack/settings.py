@@ -1,15 +1,18 @@
-import os
-import django_heroku
-import dj_database_url
-import secrets
-
+from dotenv import load_dotenv
 from pathlib import Path
 
-from decouple import Config, Csv
+import dj_database_url
+import django_heroku
+import secrets
+import os
+
+load_dotenv()
+
+from decouple import Config as decouple_config
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-config = Config(os.path.join(BASE_DIR, '.env'))
+config = decouple_config(os.path.join(BASE_DIR, '.env'))
 
 
 # Quick-start development settings - unsuitable for production
@@ -20,9 +23,10 @@ SECRET_KEY = os.environ.get('SECRET_KEY',
                             default=secrets.token_urlsafe(nbytes=64),)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
-ALLOWED_HOSTS = ['https://evening-shore-46569-0cd8556ecf85.herokuapp.com/',
+ALLOWED_HOSTS = ['evening-shore-46569-0cd8556ecf85.herokuapp.com',
                  '127.0.0.1']
 
 
@@ -83,6 +87,8 @@ WSGI_APPLICATION = 'MacTrack.wsgi.application'
 
 # db_from_env = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
+DATABASE_URL = os.environ.get('DATABASE_URL')
+
 DATABASES = {
     "default": dj_database_url.config(
         default=config('DATABASE_URL', default='postgres://postgres:password@localhost:5432/MacTrack'),
@@ -116,9 +122,6 @@ DATABASES = {
 #     }
 # }
 
-'postgres://postgres:password@localhost:5432/MacTrack'
-
-
 # DATABASES['default'].update(db_from_env)
 
 # DATABASES = {
@@ -128,10 +131,6 @@ DATABASES = {
 #             ssl_require=True,
 #         ),
 #     }
-
-
-# postgres://wtasobjxdyhorf:dd0312fd5b90ba61ddf6dc4ea120dbc8857c5cd96d43c3f767fbd630bedddb7c@ec2-44-215-1-253.compute-1.amazonaws.com:5432/d3f1bhroonsuu4
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
