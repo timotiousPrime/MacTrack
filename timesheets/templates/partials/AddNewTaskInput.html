@@ -1,0 +1,39 @@
+<div class="header">
+    <h1>Task Timer</h1>
+    <div class="form-style form-style-five">
+        <div class="row">
+            <div class="col-lg">
+                <div class="form-input mt-5">
+                    <form action="#">
+                    {% csrf_token %}
+                        <table class="table table-hover">
+                            <tbody>
+                                <tr>
+                                    <th scope="col">
+                                        New Task
+                                    </th>
+                                    {% for input in taskTimerForm %}
+                                    <td scope="col">
+                                        {{ input }}
+                                    </td>
+                                    {% endfor %}
+                                    <td>
+                                        <button 
+                                            id="addTask" 
+                                            type="submit" 
+                                            formmethod="POST" 
+                                            formaction="{% url 'Create_Timer' %}" 
+                                            class="btn btn-m btn-primary"
+                                            >
+                                            Add
+                                            </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
