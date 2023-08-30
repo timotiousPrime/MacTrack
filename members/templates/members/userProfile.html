@@ -1,7 +1,24 @@
 {% extends "main/base.html" %}
 
 {% block content %}
+<main class="px-4 mt-2">
 
-<h1>Hello {{ user.username }}</h1>
+    <h1 class="mb-4">Hello {{ user.username }}</h1>
 
+    <div class="container-fluid card-container">
+        <div class="row h-20">
+            <div class="taskHistoryCard p-4 w-50">
+                {% include 'partials/taskTimeHistoryCard.html' %}
+            </div>
+        
+            <div class="taskTimeChartCard p-4 h-20 w-50">
+                {% include 'partials/taskTimeChartCard.html' %}
+            </div>
+        </div>
+    </div>
+
+
+    
+    
+</main>
 {% endblock content %}
