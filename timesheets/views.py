@@ -46,7 +46,7 @@ def task_timer(request):
         "todays_tasks": todays_tasks,
     }
 
-    return render(request, "timesheets/taskTimer.html", context)
+    return render(request, "timesheets/taskTimerPage.html", context)
 
 
 def create_task(request):

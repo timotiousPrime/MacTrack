@@ -1,0 +1,42 @@
+<div class="card">
+  <h5 class="card-header">Task Time History</h5>
+  <div class="card-body">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">
+            Job Code
+          </th>
+          <th scope="col">
+            Ancillary Code
+          </th>
+          <th scope="col">
+            Description Code
+          </th>
+          <th scope="col">
+            Time
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for task in user_tasks %}
+          <tr>
+            <td scope="row">
+              {{ task.job_code }}
+            </td>
+            <td scope="row">
+              {{ task.ancillary_code }}
+            </td>
+            <td scope="row">
+              {{ task.description }}
+            </td>
+            <td scope="row">
+              {{ task.elapsed_time }}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <a href="#" class="btn btn-primary">See Full History</a>
+  </div>
+</div>

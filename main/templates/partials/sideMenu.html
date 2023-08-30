@@ -1,0 +1,30 @@
+{% load static %}
+<nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+    <div class="sb-sidenav-menu">
+        <div class="nav">
+            <div class="sb-sidenav-menu-heading">User</div>
+            <a class="nav-link" href="{% url 'User_Profile' user.username %}">
+                <div class="sb-nav-link-icon"><i class="fas fa-address-card"></i></div>
+                Dashboard
+            </a>
+            <a class="nav-link" href="{% url 'Task_Timer' %}">
+                <div class="sb-nav-link-icon"><i class="fas fa-stopwatch"></i></div>
+                Task Timer
+            </a>
+            <div class="sb-sidenav-menu-heading">Projects</div>
+            <a class="nav-link" href="{% url 'Task_Timer_Reports' %}">
+                <div class="sb-nav-link-icon"><i class="fas fa-chart-simple"></i></div>
+                Reports
+            </a>
+            <a class="nav-link" href="{% url 'Projects_Page' %}">
+                <div class="sb-nav-link-icon"><i class="fas fa-folder-open"></i></div>
+                Projects
+            </a>
+           
+        </div>
+    </div>
+    <div class="sb-sidenav-footer">
+        <div class="small">Logged in as:</div>
+        {{ user.username }}
+    </div>
+</nav>
