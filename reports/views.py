@@ -57,7 +57,11 @@ def task_timer_reports(request):
 
 
     # We want the time in hours
-    et_list = [t.total_seconds() / 3600 for t in et_list]
+    if et_list is not None:
+        et_list = [t.total_seconds() / 3600 for t in et_list]
+    else:
+        et_list = []
+
 
     script, div = get_graph_components(jc_list, et_list)
 
