@@ -1,0 +1,33 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<main class="container-fluid p-4">
+    <h1>Task Time History</h1>
+    
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Date Created</th>
+                <th scope="col">Job Code</th>
+                <th scope="col">Ancillary Code</th>
+                <th scope="col">Description</th>
+                <th scope="col">Time Spent</th>
+                <th scope="col">Ongoing</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in user_tasks %}
+            <tr scope="row">
+                <td>{{ task.date_created }}</td>
+                <td>{{ task.job_code }}</td>
+                <td>{{ task.ancillary_code }}</td>
+                <td>{{ task.description }}</td>
+                <td>{{ task.elapsed_time }}</td>
+                <td>{{ task.is_ongoing }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</main>
+
+{% endblock %}
