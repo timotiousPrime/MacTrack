@@ -5,13 +5,13 @@
 
     <h1 class="mb-4">Hello {{ user.username }}</h1>
 
-    <div class="container-fluid card-container">
+    <div class="container card-container">
         <div class="row h-20">
-            <div class="taskHistoryCard p-4 w-50">
+            <div class="taskHistoryCard col-sm-6 p-4 col-6 themed-grid-col">
                 {% include 'partials/taskTimeHistoryCard.html' %}
             </div>
         
-            <div class="taskTimeChartCard p-4 h-20 w-50">
+            <div class="taskTimeChartCard col-sm-6 p-4 h-20 col-6 themed-grid-col">
                 {% include 'partials/taskTimeChartCard.html' %}
             </div>
         </div>
