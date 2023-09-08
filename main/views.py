@@ -26,7 +26,7 @@ def login_page(request):
             login(request, user)
             print ("User has been authenticated!")
             print (user)
-            return redirect('Home')
+            return redirect('User_Profile', user)
     else:
         context = {
             'form': Login_Form
