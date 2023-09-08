@@ -1,39 +1,39 @@
 {% extends 'main/base.html' %}
 
 {% block content %}
-<div id="mainContent">
+<div class="container" id="mainContent">
   <h1>Task Timer</h1>
   <!-- Add new task form -->
   <form method="POST" class="container">
     {% csrf_token %}
-    <table class=" table table-hover">
-      <tbody>
-        <tr>
-            <th scope="col">New Task</th>
-            {% for row in taskTimerForm %}
-            <td scope="col">
-              {{ row }}
-            </td>   
-            {% endfor %}
-            <td>
-              <button 
-              id="addTask" 
-              type="submit" 
-              formmethod="POST" 
-              formaction="{% url 'Create_Timer' %}" 
-              class="btn btn-m btn-primary"
-              >
-              Add
-            </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </form>
+    <div class="table-responsive">
+      <table class=" table table-hover">
+        <tbody>
+          <tr>
+              <th scope="col">New Task</th>
+              {% for row in taskTimerForm %}
+              <td scope="col">
+                {{ row }}
+              </td>   
+              {% endfor %}
+              <td>
+                <button 
+                id="addTask" 
+                type="submit" 
+                formmethod="POST" 
+                formaction="{% url 'Create_Timer' %}" 
+                class="btn btn-m btn-primary"
+                >
+                Add
+              </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+    </div>
+  </form>
     
-  <div id="todaysTasks">
-    {% include "partials/usersTodaysTaskTable.html" %}
-  </div>
+  {% include "partials/usersTodaysTaskTable.html" %}
   
   <!-- Modal for edit interface -->
   <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
