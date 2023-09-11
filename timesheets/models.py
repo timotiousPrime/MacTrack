@@ -15,7 +15,7 @@ class AncillaryJobCode(models.Model):
         ordering = ['code']
 
     def __str__(self):
-        return self.code + ": " + self.description
+        return self.description
     
 
 class TaskTime(models.Model):
