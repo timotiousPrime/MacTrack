@@ -29,9 +29,9 @@ class Project(models.Model):
     is_active = models.BooleanField(default=True)
     job_code = models.CharField(max_length=8, primary_key=True, blank=False, null=False)
     status = models.CharField(max_length=4, default="Des", choices=PROJECT_STATUS, null=False, blank=False)
-    created_by = models.ForeignKey(User, on_delete=models.RESTRICT)
+    created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=True, null=True)
     project_captains = models.ManyToManyField(User, related_name="projects")
-    purchase_order_number = models.CharField(max_length=24)
+    purchase_order_number = models.CharField(max_length=24, blank=True, null=True)
 
     def __str__(self) -> str:
         return self.job_code
