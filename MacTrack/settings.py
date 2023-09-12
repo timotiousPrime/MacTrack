@@ -97,40 +97,6 @@ DATABASES = {
     )
 }
 
-# DATABASES = {
-#     "default": dj_database_url.config(
-#         default=os.environ.get('DATABASE_URL', 'postgres://postgres:password@localhost:5432/MacTrack'),
-#         conn_max_age=600,
-#         ssl_require=True
-#     )
-# }
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "NAME": "MacTrack",
-#         "USER": "postgres",
-#         "PASSWORD": 'password',
-#         "HOST": "localhost",
-#         "PORT": "5432",
-#     }
-# }
-
-# DATABASES['default'].update(db_from_env)
-
-# DATABASES = {
-#         "default": dj_database_url.config(
-#             conn_max_age=600,
-#             conn_health_checks=True,
-#             ssl_require=True,
-#         ),
-#     }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
