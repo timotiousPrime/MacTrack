@@ -1,96 +1,42 @@
-// For Active Tasks:
-  // Hide edit btn for
-  // Show pause btn for
-  // Hide start btn for all
+export const timers = {}
 
-// For Inactive Tasks:
-  // Show edit btns for inactive tasks
-  // Hide pause btns for inactive tasks
-  // Show start btns for inactive tasks
+export function updateTimer(){
+  console.log("startTimer function has been called")
+  let taskRows = $( ".task_row" )
 
-// $(window).on('resize', () =>{
-//   let actionBtns = $( "btn-group" )
-//   $(actionBtns).on("click", isTaskActive())
+  taskRows.each((index, element) => {
+    // Instantiate task row variables
+    let seconds = 0
 
-//   function isTaskActive(){
-//     console.log("isTaskActive is working")
-//   }
-// })
-
-let btnGroups = $( ".btn-group" )
-let pauseBtns = $( ".pause_btn")
-let startBtns = $( ".start_btn")
-let editBtns = $( ".edit_btn")
-
-$(window).ready(updateBtns)
-
-function updateBtns(){
-  console.log("updateBtns has been called")
-  $(".btn-group").each((index, element)=> {
-    let elementIdParts = $(element).attr("id").split("_")
-    let elementId = elementIdParts[1]
-
-
-    if ( $(element).hasClass("active") ){
-      activateBtns(elementId)
-    }
-    else {
-      deactivateBtns(elementId)
+    if ($(element).hasClass('active')){
+      console.log("this element has ACTIVE class", $(element))
+      // Get active task Row Id
+      let elementIdParts = $(element).attr("id").split("_")
+      let taskId = elementIdParts[1]
+      console.log("Task Row ID " + taskId + " is active")
+  
+      // Get Accumalated Time for task
+      let elapsed_time_ele = $( "#elapsed_time_" + taskId)
+      let elapsed_time_value = $( elapsed_time_ele ).text().trim()
+      let timeParts = elapsed_time_value.split(":")
+      seconds += ((+timeParts[0]*60*60)+(+timeParts[1]*60)+(+timeParts[2]))
+  
+      // Instantiate Timer
+      timers[taskId] = setInterval(() =>{
+        seconds++
+        let date = new Date(null)
+        date.setSeconds(seconds)
+        let timeStr = date.toISOString().substring(11,11+8)
+        $(elapsed_time_ele).text(timeStr)
+        }, 1000)
+    } else {
+      console.log("this element has NO active class", $(element))
+      // Get active task Row Id
+      let elementIdParts = $(element).attr("id").split("_")
+      let taskId = elementIdParts[1]
+      console.log("Task Row ID " + taskId + " is NOT active")
+      // Pause timer
+      clearInterval(timers[taskId])
     }
   })
-  
-}
-
-$(pauseBtns).on('click', (e) => {
-  // Split Target ID to get Task ID 
-  let taskIdParts = e.target.id.split("_")
-  let taskId = taskIdParts[2]
-  // Check if task is active
-  let btnGroupId = '#task_' + taskId + '_btn_group'
-  let isActive = $( btnGroupId ).hasClass('active')
-  
-  isActive ? activateBtns(taskId) : deactivateBtns(taskId)
-  
-  // remove active class from btnGroup
-  let btnGroup = $( "task_" + taskId + "_btn_group" )
-  $(btnGroup).removeClass("active")
-}) 
-
-$(startBtns).on('click', (e) => {
-  // Split Target ID to get Task ID 
-  let taskIdParts = e.target.id.split("_")
-  let taskId = taskIdParts[2]
-  // Check if task is active
-  let btnGroupId = '#task_' + taskId + '_btn_group'
-  let isActive = $( btnGroupId ).hasClass('active')
-  
-  isActive ? deactivateBtns(taskId) : activateBtns(taskId)
-
-  // add active class to btnGroup
-  let btnGroup = $( "task_" + taskId + "_btn_group" )
-  $(btnGroup).addClass("active")
-}) 
-
-function activateBtns(id){
-  console.log("task" + id + " being activated")
-  // Instantiate relavent buttons
-  let editBtn = $( "#edit_task_" + id )
-  let startBtn = $( "#start_task_" + id )
-  let pauseBtn = $( "#pause_task_" + id )
-
-  $(editBtn).hide()
-  $(startBtn).hide()
-  $(pauseBtn).show()
-}
-
-function deactivateBtns(id){
-  console.log("task" + id + " being deactivated")
-  // Instantiate relavent buttons
-  let editBtn = $( "#edit_task_" + id )
-  let startBtn = $( "#start_task_" + id )
-  let pauseBtn = $( "#pause_task_" + id )
-
-  $(editBtn).show()
-  $(startBtn).show()
-  $(pauseBtn).hide()
 }
