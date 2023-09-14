@@ -25,6 +25,7 @@ class TaskTime(models.Model):
         ("Doc", "Documentation"),
         ("Dwg", "Drawings"),
         ("Gen", "General"),
+        ("Mod", "Modifications"),
     ]
 
     job_code = models.ForeignKey(
