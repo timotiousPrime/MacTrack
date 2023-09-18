@@ -12,10 +12,10 @@ class AncillaryJobCode(models.Model):
     description = models.CharField(max_length=42)
 
     class Meta:
-        ordering = ['code']
+        ordering = ['description']
 
     def __str__(self):
-        return self.code + " - " + self.description
+        return self.description
     
 
 class TaskTime(models.Model):
