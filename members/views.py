@@ -4,11 +4,6 @@ from django.contrib.auth.models import User
 from members.forms import Login_Form
 from timesheets.models import TaskTime
 from .templates.graphs.barChart import get_graph_components
-from django.utils import timezone
-from datetime import timedelta
-from django.db.models import Sum, Count
-
-
 
 # Create your views here.
 
@@ -27,7 +22,7 @@ def login_view(request):
             login(request, user)
             print ("User has been authenticated!")
             print (user)
-            return redirect('Home')
+            return redirect('User_Profile')
     else:
         context = {
             'form': Login_Form
@@ -46,10 +41,6 @@ def user_profile(request, username):
     # Add up all the time for each job code
     job_code_hours = {}
 
-    # Job Codes
-
-    # Task Time
-
     for t in user_task_times:
         if t.job_code not in job_code_hours:
             job_code_hours[t.job_code] = (t.elapsed_time.seconds / 3600)
@@ -63,9 +54,6 @@ def user_profile(request, username):
     et_list = list(job_code_hours.values())
     print("Elapsed Times: ",et_list)
     
-
-
-
     script, div = get_graph_components(jc_list, et_list)
 
     # Get user Task times for history 
