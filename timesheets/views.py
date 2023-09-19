@@ -3,14 +3,28 @@ from django.contrib.auth.models import User
 from .models import TaskTime
 from timesheets.forms import Task_Timer_Form
 from django.utils import timezone
+from datetime import timedelta
 
+def calculate_total_time(tasks):
+    # Initialize total duration
+    total_duration = timedelta()
+
+    # Calculate total duration by iterating through tasks
+    for task in tasks:
+        total_duration += task.elapsed_time
+
+    # Calculate total hours and minutes
+    total_hours, remainder = divmod(total_duration.seconds, 3600)
+    total_minutes = remainder // 60
+
+    return total_hours, total_minutes
 
 # Create your views here.
 def task_timer(request):
     today = timezone.localdate()
     user = get_object_or_404(User, username=request.user.username)
     user_tasks = TaskTime.objects.filter(user=request.user.id)
-    todays_tasks = user_tasks.filter(date_created__date=today)
+    todays_tasks = user_tasks.filter(date_created__date=today).exclude(elapsed_time=None)
 
     """
     Check for ongoing tasks from previous days, and create new tasks for today if any ongoing
@@ -35,15 +49,40 @@ def task_timer(request):
             newTask = TaskTime(user=request.user, ancillary_code=og[1], description=og[2], job_code=og[0], is_ongoing=True)
             newTask.save()
 
-    # Get updated tasks
-    user_tasks = TaskTime.objects.filter(user=request.user.id)
-    todays_tasks = user_tasks.filter(date_created__date=today)
+    # Calculate the total time
+    todays_total_hrs, todays_total_minutes = calculate_total_time(todays_tasks)
+
+    # Get Longest Task
+    longest_task = None
+    # Get total Design Time
+    total_design_time = timedelta()
+
+    for task in todays_tasks:
+        if longest_task is None or task.elapsed_time > longest_task.elapsed_time:
+            longest_task = task
+        if task.description == "Des":
+            total_design_time += task.elapsed_time
+
+    # Calculate total hours and minutes
+    total_design_hours, remainder = divmod(total_design_time.seconds, 3600)
+    total_design_minutes = remainder // 60
+
+    # Get todays task count, exclude breaks
+    todays_task_count = todays_tasks.exclude(ancillary_code="Break")
+
 
     context = {
+        "title": "Task Timer",
         "user": user,
         "taskTimerForm": Task_Timer_Form,
         "userTasks": user_tasks,
         "todays_tasks": todays_tasks,
+        "todays_total_hrs" : todays_total_hrs,
+        "todays_total_minutes" : todays_total_minutes,
+        "longest_task" : longest_task,
+        "total_design_hours" : total_design_hours,
+        "total_design_minutes" : total_design_minutes,
+        "todays_task_count": todays_task_count,
     }
 
     return render(request, "timesheets/taskTimerPage.html", context)
