@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 def projects_landing_page(request):
     projects = Project.objects.all()
     context = {
+        "title": "Projects",
         "projects_form": ProjectForm,
         "projects": projects
     }
