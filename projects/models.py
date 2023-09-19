@@ -33,6 +33,9 @@ class Project(models.Model):
     project_captains = models.ManyToManyField(User, related_name="projects")
     purchase_order_number = models.CharField(max_length=24, blank=True, null=True)
 
+    class Meta:
+        ordering = ['job_code']
+
     def __str__(self) -> str:
         return self.job_code
 
