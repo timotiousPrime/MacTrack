@@ -46,7 +46,6 @@ def user_profile(request, username):
             job_code_hours[t.job_code] = (t.elapsed_time.seconds / 3600)
         else:
             job_code_hours[t.job_code] += (t.elapsed_time.seconds  / 3600)
-            print("TYPE:", type(job_code_hours[t.job_code]))
 
     # We need lists for the input for the x and y axis's respectively
     jc_list = [project.job_code for project in job_code_hours.keys()]
@@ -62,6 +61,7 @@ def user_profile(request, username):
     user_tasks = list(TaskTime.objects.filter(user=user).exclude(elapsed_time=None).order_by('-id'))[:5]
 
     context = {
+        "title": "Dashboard",
         'user': user,
         'user_tasks': user_tasks,
         "reports": "Here are some task timer reports",
@@ -75,6 +75,7 @@ def user_task_history(request, username):
     print(username)
     user_tasks = TaskTime.objects.filter(user=request.user.id).exclude(elapsed_time=None).order_by('-id')
     context = {
+        "title": "Task History",
         "user_tasks": user_tasks
     }
     return render (request, "timesheets/taskTimeHistory.html", context)
