@@ -1,0 +1,36 @@
+<div class="container" id="mainContent">
+    <div class="headerSection row">
+      <div class="totalTimeCard col">
+        <div class="card text-white bg-info mt-4" style="max-width: 18rem;">
+          <div class="card-body">
+            <p class="card-title">Today's Total Time</p>
+            <h4 class="card-text">{{ todays_total_hrs }}h {{ todays_total_minutes }}m</h4>
+          </div>
+          </div>
+        </div>
+        <div class="totalLongestTask col">
+            <div class="card text-white bg-success mt-4" style="max-width: 18rem;">
+              <div class="card-body">
+                  <p class="card-title">Today's Design Time</p>
+                  <h4 class="card-text">{{ total_design_hours }}h {{ total_design_minutes }}m</h4>
+                </div>
+            </div>
+        </div>
+        <div class="totalLongestTask col">
+            <div class="card text-white bg-secondary mt-4" style="max-width: 18rem;">
+                <div class="card-body">
+                  <p class="card-title">Today's Longest Task</p>
+                  <h4 class="card-text">{{ longest_task.job_code }}-{{ longest_task.ancillary_code.code }} {{ longest_task.get_description_display|truncatechars_html:7 }} </h4>
+              </div>
+              </div>
+        </div>
+        <div class="totalLongestTask col">
+            <div class="card text-white bg-warning mt-4" style="max-width: 18rem;">
+              <div class="card-body">
+                <p class="card-title">Today's Total Task Count</p>
+                <h4 class="card-text">{{ todays_task_count|length }}</h4>
+              </div>
+              </div>
+        </div>
+    </div>
+</div>
