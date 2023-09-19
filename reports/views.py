@@ -68,6 +68,7 @@ def task_timer_reports(request):
     script, div = get_graph_components(jc_list, et_list)
 
     context = {
+        "title": "Task Timer Reports",
         "reports": "Here are some task timer reports",
         "script": script,
         "div": div
