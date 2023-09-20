@@ -53,6 +53,9 @@ class TaskTime(models.Model):
     is_running = models.BooleanField(default=False)
     is_ongoing = models.BooleanField(default=True)
 
+    class Meta:
+        ordering = ['date_created']
+
     def __str__(self) -> str:
         return str(self.job_code) + ": " + str(self.elapsed_time)
 
