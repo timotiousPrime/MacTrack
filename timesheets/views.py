@@ -19,6 +19,14 @@ def calculate_total_time(tasks):
 
     return total_hours, total_minutes
 
+def delete_old_timeless_tasks(user_id):
+    today = timezone.localdate()
+    print("Today is: ", today)
+    old_user_tasks = TaskTime.objects.filter(user=user_id).filter(elapsed_time=None).exclude(date_created__date=today)
+    for task in old_user_tasks:
+        print("deleting: ", task)
+        # task.delete()
+
 # Create your views here.
 def task_timer(request):
     today = timezone.localdate()
@@ -49,6 +57,9 @@ def task_timer(request):
             newTask = TaskTime(user=request.user, ancillary_code=og[1], description=og[2], job_code=og[0], is_ongoing=True)
             newTask.save()
 
+    # remove old tasks with no time
+    delete_old_timeless_tasks(request.user.id)
+
     # Calculate the total time
     todays_total_hrs, todays_total_minutes = calculate_total_time(todays_tasks)
 
@@ -69,7 +80,6 @@ def task_timer(request):
 
     # Get todays task count, exclude breaks
     todays_task_count = todays_tasks.exclude(ancillary_code="Break")
-
 
     context = {
         "title": "Task Timer",
