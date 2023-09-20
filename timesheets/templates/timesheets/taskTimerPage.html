@@ -4,12 +4,14 @@
 {% block content %}
 
 <main class="container-fluid px-4">
-    <!-- Header -->
-    {% include 'partials/taskTimerHeader.html' %}
-    <!-- New Task Input -->
-    {% include "partials/AddNewTaskInput.html" %}
-    <!-- Todays Active Tasks -->
-    {% include "partials/usersTodaysTaskTable.html" %}
+    <div class="container-fluid">
+        <!-- Header -->
+        {% include 'partials/taskTimerHeader.html' %}
+        <!-- New Task Input -->
+        {% include "partials/AddNewTaskInput.html" %}
+        <!-- Todays Active Tasks -->
+        {% include "partials/usersTodaysTaskTable.html" %}
+    </div>
 
     <!-- Modal for edit interface -->
     <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
