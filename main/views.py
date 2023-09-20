@@ -8,8 +8,9 @@ from members.forms import Login_Form
 # Create your views here.
 @login_required
 def landingPage(request):
+    username = request.user.username
     context = {'greeting': "Welcome to the landing page!"}
-    return render(request, 'main/startPage.html', context)
+    return redirect('User_Profile', username)
 
 def login_page(request):
     if request.method == "POST":
