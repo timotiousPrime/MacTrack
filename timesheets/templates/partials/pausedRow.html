@@ -1,4 +1,8 @@
-<tr id="task_{{ task.id }}" class="task_row {% if task.is_running %} active {% endif %}">
+<tr 
+id="task_{{ task.id }}" 
+class="task_row"
+hx-target="this"
+hx-swap="outerHTML">
     <td id="date_created_{{ task.id }}" class="col-2 task_created_date" scope="col">
       {{ task.date_created|date:"d-m-Y" }}
     </td>
@@ -33,17 +37,36 @@
     <td class="col-2" scope="col">
         <div 
         id="task_{{ task.id }}_btn_group" 
-        class="container btn-group btn-group-sm {% if task.is_running %} active {% endif %}" 
+        class="container btn-group btn-group-sm" 
         role="group" .
         aria-label="Basic mixed styles example"
-        hx-target="this"
-        hx-swap="outerHTML"
         >
-          {% if task.is_running %}
-            {% include 'partials/startBtnOptions.html' %}
-          {% else %}
-            {% include 'partials/pauseBtnOptions.html' %}
-          {% endif %}
+            <button 
+            id="start_task_{{ task.id }}" 
+            class="btn btn-success start_btn" 
+            hx-post="{% url "Start_Timer" task.id %}"
+            > 
+            Start 
+            </button>
+            <button 
+            id="edit_task_{{ task.id }}" 
+            class="btn btn-warning edit_btn" 
+            data-bs-toggle="modal" 
+            data-bs-target="#editModal" 
+            hx-get="{% url 'Edit_Timer' task.id %}" 
+            hx-target="#dialog"
+            hx-swap="innerHTML"
+            >
+            Edit
+            </button>
+            <button 
+            id="delete_task_{{ task.id }}" 
+            class="btn btn-danger delete_btn" 
+            hx-post="{% url "Delete_Timer"  task.id %}" 
+            hx-confirm="Are you sure you want to delete this?" 
+            >
+            Delete
+            </button>
         </div>
     </td>
 </tr>

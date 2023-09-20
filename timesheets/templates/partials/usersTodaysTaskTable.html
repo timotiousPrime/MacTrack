@@ -1,3 +1,5 @@
+{% load static %}
+
 <div class="container-fluid row" id="todaysTasks">
     <form method="POST" class="container">
         {% csrf_token %}
@@ -13,9 +15,16 @@
                 <th scope="col">Actions</th>
                 </tr>
             </thead>
-            <tbody id="task_table" hx-target="closest tr" hx-swap="outerHTML ">
+            <tbody 
+            id="task_table" 
+            hx-target="closest tr" 
+            hx-swap="outerHTML">
             {% for task in todays_tasks reversed %}
-                {% include "partials/taskTableRow.html" %}
+                {% if task.is_running %}
+                    {% include 'partials/runningRow.html' %}
+                {% else %}
+                    {% include 'partials/pausedRow.html' %}
+                {% endif %}
             {% empty %}
                 <tr>
                 <td colspan="12" >You have no task history</td class="col-12">
@@ -25,3 +34,5 @@
         </table>
     </form>
 </div>
+
+<script src="{% static 'main/js/timer.js' %}"></script>
