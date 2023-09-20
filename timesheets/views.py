@@ -135,39 +135,50 @@ def update_ongoing(request, task_id):
 
 
 def start_timer(request, task_id):
-    if request.method == "POST":
-        task = TaskTime.objects.get(id=task_id)
-        task.is_running = True
-        task.time_started = timezone.now()
-        task.date_edited = timezone.now()
-        task.save()
-        return HttpResponse(status=200)
+    task = TaskTime.objects.get(id=task_id)
+    if not task.is_running:
+        if request.method == "POST":
+            task.is_running = True
+            task.time_started = timezone.now()
+            task.date_edited = timezone.now()
+            task.save()
+            context = {
+                "task": task,
+            }
+            return render(request, "partials/runningRow.html", context)
 
     return redirect("Task_Timer")
 
 
 def stop_timer(request, task_id):
-    if request.method == "POST":
-        task = TaskTime.objects.get(id=task_id)
-        task.is_running = False
-        task.time_stopped = timezone.now()
-        task.get_elapsed_time()
-        task.date_edited = timezone.now()
-        task.save()
-        return HttpResponse(task.elapsed_time)
+    task = TaskTime.objects.get(id=task_id)
+    if task.is_running:
+        if request.method == "POST":
+            task.is_running = False
+            task.time_stopped = timezone.now()
+            task.get_elapsed_time()
+            task.date_edited = timezone.now()
+            task.save()
+            context = {
+                "task": task,
+            }
+            return render(request, "partials/pausedRow.html", context)
 
     return redirect("Task_Timer")
 
 
 def edit_timer(request, task_id):
-    """View is called when a task timers' (tte) edit button has been clicked or when a tte form is submitted"""
+    """View is called when a task timers' edit (TTE) button has been clicked or when a TTE form is submitted"""
     task = TaskTime.objects.get(id=task_id)
     if request.method == "POST":
         form = Task_Timer_Form(request.POST or None, instance=task)
         if form.is_valid():
             task.date_edited = timezone.now()
             task.save()
-            return render(request, "partials/taskTableRow.html", {"task": task})
+            context = {
+                "task": task
+            }
+            return render(request, "partials/pauseRow.html", context)
 
     if request.method == "GET":
         print("********Getting Edit view********")
