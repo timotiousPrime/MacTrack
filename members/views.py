@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect, get_object_or_404, get_list_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 from members.forms import Login_Form
 from timesheets.models import TaskTime
 from .templates.graphs.barChart import get_graph_components
@@ -34,6 +35,7 @@ def logout_view(request):
     logout(request)
     return redirect('Home')
 
+@login_required
 def user_profile(request, username):
     # Get all task times 
     user_task_times = TaskTime.objects.filter(user=request.user.id).exclude(elapsed_time=None)
@@ -70,7 +72,7 @@ def user_profile(request, username):
     }
     return render(request, 'members/userProfile.html', context)
 
-
+@login_required
 def user_task_history(request, username):
     print(username)
     user_tasks = TaskTime.objects.filter(user=request.user.id).exclude(elapsed_time=None).order_by('-id')
