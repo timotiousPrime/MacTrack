@@ -1,6 +1,9 @@
 {% load static %}
 
-<div class="container-fluid row" id="todaysTasks">
+<div 
+class="container-fluid row" 
+id="todaysTasks"
+>
     <form method="POST" class="container">
         {% csrf_token %}
         <table class="table table-hover ">
@@ -35,4 +38,6 @@
     </form>
 </div>
 
+
+{{ running_task|json_script:"running_task" }}
 <script src="{% static 'main/js/timer.js' %}"></script>
