@@ -1,10 +1,12 @@
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 from .models import TaskTime
 from timesheets.forms import Task_Timer_Form
 from django.utils import timezone
 from datetime import timedelta
 
+# ********** Utility Functions **********
 def calculate_total_time(tasks):
     # Initialize total duration
     total_duration = timedelta()
@@ -27,7 +29,20 @@ def delete_old_timeless_tasks(user_id):
         print("deleting: ", task)
         # task.delete()
 
+def stop_running_tasks(userId):
+    running_tasks = TaskTime.objects.filter(user=userId).filter(is_running=True)
+    for rt in running_tasks:
+        rt.is_running = False
+        rt.time_stopped = timezone.now()
+        rt.get_elapsed_time()
+        rt.date_edited = timezone.now()
+        rt.save()
+
+
+# ********** End of Utility Functions **********
+
 # Create your views here.
+@login_required
 def task_timer(request):
     today = timezone.localdate()
     user = get_object_or_404(User, username=request.user.username)
@@ -57,8 +72,8 @@ def task_timer(request):
             newTask = TaskTime(user=request.user, ancillary_code=og[1], description=og[2], job_code=og[0], is_ongoing=True)
             newTask.save()
 
-    # remove old tasks with no time
-    delete_old_timeless_tasks(request.user.id)
+    # remove old tasks with no time - WIP
+    # delete_old_timeless_tasks(request.user.id)
 
     # Calculate the total time
     todays_total_hrs, todays_total_minutes = calculate_total_time(todays_tasks)
@@ -81,6 +96,20 @@ def task_timer(request):
     # Get todays task count, exclude breaks
     todays_task_count = todays_tasks.exclude(ancillary_code="Break")
 
+    # Get Running Task
+    try:
+        running_task = user_tasks.get(is_running=True)
+    except TaskTime.DoesNotExist:
+        # Handle the case where there is no running task
+        running_task = None  # You can set it to None or any other default value
+
+    print("Running Task: ", running_task)
+
+    if running_task == None:
+        running_task_info = None
+    else:
+        running_task_info = {"id": running_task.id, "time_started": running_task.time_started, "elapsed_time": running_task.elapsed_time.seconds}
+
     context = {
         "title": "Task Timer",
         "user": user,
@@ -93,6 +122,7 @@ def task_timer(request):
         "total_design_hours" : total_design_hours,
         "total_design_minutes" : total_design_minutes,
         "todays_task_count": todays_task_count,
+        "running_task": running_task_info,
     }
 
     return render(request, "timesheets/taskTimerPage.html", context)
@@ -100,14 +130,23 @@ def task_timer(request):
 
 def create_task(request):
     if request.method == "POST":
+        today = timezone.localdate()
+
         form = Task_Timer_Form(request.POST)
         if form.is_valid():
+            stop_running_tasks(request.user.id)
             task = form.save(commit=False)
             task.user = request.user
             task.time_started = timezone.now()
             task.is_running = True
             task.save()
-            return redirect("Task_Timer")
+
+            todays_tasks = TaskTime.objects.filter(user=request.user.id, date_created__date=today)
+            context = {
+                "todays_tasks": todays_tasks,
+                "running_task": task
+            }
+            render(request, "partials/usersTodaysTaskTable.html", context)
 
     return redirect("Task_Timer")
 
@@ -135,17 +174,24 @@ def update_ongoing(request, task_id):
 
 
 def start_timer(request, task_id):
+    userId = request.user.id
+    today = timezone.localdate()
     task = TaskTime.objects.get(id=task_id)
+    todays_tasks = TaskTime.objects.filter(user=userId, date_created__date=today).exclude(elapsed_time=None)
     if not task.is_running:
         if request.method == "POST":
+            stop_running_tasks(userId)
             task.is_running = True
             task.time_started = timezone.now()
             task.date_edited = timezone.now()
             task.save()
+            running_task_info = {"id": task.id, "time_started":  task.time_started, "elapsed_time": task.elapsed_time.seconds}
             context = {
                 "task": task,
+                "todays_tasks": todays_tasks,
+                "running_task": running_task_info,
             }
-            return render(request, "partials/runningRow.html", context)
+            return render(request, "partials/usersTodaysTaskTable.html", context)
 
     return redirect("Task_Timer")
 
