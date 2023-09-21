@@ -45,6 +45,8 @@ hx-swap="outerHTML">
             id="start_task_{{ task.id }}" 
             class="btn btn-success start_btn" 
             hx-post="{% url "Start_Timer" task.id %}"
+            hx-target="#todaysTasks"
+            hx-swap="outerHTML"
             > 
             Start 
             </button>
