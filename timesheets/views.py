@@ -38,7 +38,6 @@ def stop_running_tasks(userId):
         rt.date_edited = timezone.now()
         rt.save()
 
-
 # ********** End of Utility Functions **********
 
 # Create your views here.
@@ -47,14 +46,13 @@ def task_timer(request):
     today = timezone.localdate()
     user = get_object_or_404(User, username=request.user.username)
     user_tasks = TaskTime.objects.filter(user=request.user.id)
-    todays_tasks = user_tasks.filter(date_created__date=today).exclude(elapsed_time=None)
+    todays_tasks = user_tasks.filter(date_created__date=today)
 
     """
     Check for ongoing tasks from previous days, and create new tasks for today if any ongoing
     """
     # Get ongoing tasks from user
-    users_ongoing_tasks = user_tasks.filter(is_ongoing=True)
-    # ogt = (job_code, ancillary_code, description)
+    users_ongoing_tasks = user_tasks.filter(is_ongoing=True).exclude(date_created=today)
 
     # Create a set of ongoing tasks - no duplicate tasks with the same jobcodes, ancillarycodes and descriptions
     og_tasks = set()
@@ -69,12 +67,11 @@ def task_timer(request):
             if og[0] == tt.job_code and og[1] == tt.ancillary_code and og[2] == tt.description:
                 task_exists = True
         if not task_exists:
-            newTask = TaskTime(user=request.user, ancillary_code=og[1], description=og[2], job_code=og[0], is_ongoing=True)
+            newTask = TaskTime(user=request.user, ancillary_code=og[1], description=og[2], job_code=og[0], is_ongoing=True, is_running=False)
             newTask.save()
 
-    # remove old tasks with no time - WIP
-    # delete_old_timeless_tasks(request.user.id)
 
+    todays_tasks = todays_tasks.exclude(elapsed_time=None)
     # Calculate the total time
     todays_total_hrs, todays_total_minutes = calculate_total_time(todays_tasks)
 
@@ -142,9 +139,10 @@ def create_task(request):
             task.save()
 
             todays_tasks = TaskTime.objects.filter(user=request.user.id, date_created__date=today)
+            running_task_info = {"id": task.id, "time_started": task.time_started, "elapsed_time": task.elapsed_time.seconds}
             context = {
                 "todays_tasks": todays_tasks,
-                "running_task": task
+                "running_task": running_task_info
             }
             render(request, "partials/usersTodaysTaskTable.html", context)
 
