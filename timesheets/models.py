@@ -44,7 +44,10 @@ class TaskTime(models.Model):
     description = models.CharField(
         max_length=3, default="Gen", choices=JOB_DESCRIPTIONS, null=False, blank=False
     )
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        User, 
+        on_delete=models.CASCADE,
+        related_name="tasks")
     elapsed_time = models.DurationField(blank=True, null=True)
     time_started = models.DateTimeField(blank=True, null=True)
     time_stopped = models.DateTimeField(blank=True, null=True)
