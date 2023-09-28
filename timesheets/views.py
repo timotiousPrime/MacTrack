@@ -67,7 +67,7 @@ def task_timer(request):
             if og[0] == tt.job_code and og[1] == tt.ancillary_code and og[2] == tt.description:
                 task_exists = True
         if not task_exists:
-            newTask = TaskTime(user=request.user, ancillary_code=og[1], description=og[2], job_code=og[0], is_ongoing=True, is_running=False)
+            newTask = TaskTime(user=request.user, ancillary_code=og[1], description=og[2], job_code=og[0], is_ongoing=True, is_running=False, elapsed_time=timedelta(0))
             newTask.save()
 
 
