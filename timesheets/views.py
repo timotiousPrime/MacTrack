@@ -1,44 +1,17 @@
+# Django functions
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
-from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+# Models
 from .models import TaskTime
+from django.contrib.auth.models import User
+# Forms
 from timesheets.forms import Task_Timer_Form
+# Time functions
 from django.utils import timezone
 from datetime import timedelta
+# Utility Functions
+from .utilities import calculate_total_time, stop_running_tasks
 
-# ********** Utility Functions **********
-def calculate_total_time(tasks):
-    # Initialize total duration
-    total_duration = timedelta()
-
-    # Calculate total duration by iterating through tasks
-    for task in tasks:
-        total_duration += task.elapsed_time
-
-    # Calculate total hours and minutes
-    total_hours, remainder = divmod(total_duration.seconds, 3600)
-    total_minutes = remainder // 60
-
-    return total_hours, total_minutes
-
-def delete_old_timeless_tasks(user_id):
-    today = timezone.localdate()
-    print("Today is: ", today)
-    old_user_tasks = TaskTime.objects.filter(user=user_id).filter(elapsed_time=None).exclude(date_created__date=today)
-    for task in old_user_tasks:
-        print("deleting: ", task)
-        # task.delete()
-
-def stop_running_tasks(userId):
-    running_tasks = TaskTime.objects.filter(user=userId).filter(is_running=True)
-    for rt in running_tasks:
-        rt.is_running = False
-        rt.time_stopped = timezone.now()
-        rt.get_elapsed_time()
-        rt.date_edited = timezone.now()
-        rt.save()
-
-# ********** End of Utility Functions **********
 
 # Create your views here.
 @login_required
@@ -222,7 +195,7 @@ def edit_timer(request, task_id):
             context = {
                 "task": task
             }
-            return render(request, "partials/pauseRow.html", context)
+            return redirect("Task_Timer")
 
     if request.method == "GET":
         print("********Getting Edit view********")
