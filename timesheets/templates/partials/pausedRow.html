@@ -61,14 +61,16 @@ hx-swap="outerHTML">
             >
             Edit
             </button>
-            <button 
-            id="delete_task_{{ task.id }}" 
-            class="btn btn-danger delete_btn" 
-            hx-post="{% url "Delete_Timer"  task.id %}" 
-            hx-confirm="Are you sure you want to delete this?" 
-            >
-            Delete
-            </button>
+            {% if not task.is_ongoing %}
+              <button 
+              id="delete_task_{{ task.id }}" 
+              class="btn btn-danger delete_btn" 
+              hx-post="{% url "Delete_Timer"  task.id %}" 
+              hx-confirm="Are you sure you want to delete this?" 
+              >
+              Delete
+              </button>
+            {% endif %}
         </div>
     </td>
 </tr>
