@@ -120,10 +120,9 @@ def edit_timer(request, task_id):
         if form.is_valid():
             task.date_edited = timezone.now()
             task.save()
-            context = {
-                "task": task
-            }
-            return redirect("Task_Timer")
+            
+            context = get_task_timer_context(request.user.id)
+            return render(request, "timesheets/taskTimerPage.html", context)
 
     if request.method == "GET":
         print("********Getting Edit view********")
