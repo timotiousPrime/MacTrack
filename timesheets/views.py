@@ -122,7 +122,7 @@ def edit_timer(request, task_id):
             task.save()
             
             context = get_task_timer_context(request.user.id)
-            return render(request, "timesheets/taskTimerPage.html", context)
+            return render(request, "partials/taskTimer.html", context)
 
     if request.method == "GET":
         print("********Getting Edit view********")
