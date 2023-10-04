@@ -3,21 +3,6 @@
 
 {% block content %}
 
-<main id="taskTimerPage" class="container-fluid px-4">
-    <div class="container-fluid">
-        <!-- Header -->
-        {% include 'partials/taskTimerHeader.html' %}
-        <!-- New Task Input -->
-        {% include "partials/AddNewTaskInput.html" %}
-        <!-- Todays Active Tasks -->
-        {% include "partials/usersTodaysTaskTable.html" %}
-    </div>
+{% include 'partials/taskTimer.html' %}
 
-    <!-- Modal for edit interface -->
-    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-        <div id="dialog" class="modal-dialog">
-        <!-- Inject Modal HTML in here -->
-        </div>
-    </div>
-</main>
 {% endblock content %}
