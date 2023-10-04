@@ -25,7 +25,7 @@ hx-post="{{ request.path }}" >
             class="btn btn-primary" 
             data-bs-dismiss="modal" 
             hx-post="{% url 'Edit_Timer' task.id %}"
-            hx-target="#layoutSidenav_content"
+            hx-target="#taskTimerPage"
             hx-swap="outerHTML"
         >
             Save changes
