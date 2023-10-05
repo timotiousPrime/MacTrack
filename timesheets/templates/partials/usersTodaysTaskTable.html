@@ -39,5 +39,5 @@ id="todaysTasks"
 </div>
 
 
-{{ running_task|json_script:"running_task" }}
+{{ todays_stats.tasks_info|json_script:"running_task" }}
 <script src="{% static 'main/js/timer.js' %}"></script>
