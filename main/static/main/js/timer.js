@@ -167,42 +167,109 @@
 //     console.log("Running task: " + runningTask);
 // }
 
-const timers = {}
+// if (!timers){
+//   const timers = {}
+// } else {
+//   console.log(timers)
+// }
 
 
-$(document).ready(() => {
-  let taskTimeData = JSON.parse(document.getElementById("running_task").textContent) 
-  console.log(taskTimeData)
 
-  if (taskTimeData) {
-    let taskId = taskTimeData.id
-    let time_started = taskTimeData.time_started 
-    let elapsed_time = taskTimeData.elapsed_time
+// $(document).ready(() => {
+//   let taskTimeData = JSON.parse(document.getElementById("running_task").textContent) 
+//   console.log(taskTimeData)
+
+//   if (taskTimeData) {
+//     let taskId = taskTimeData.id
+//     let time_started = taskTimeData.time_started 
+//     let elapsed_time = taskTimeData.elapsed_time
     
-    let now = new Date()
+//     let now = new Date()
     
-    console.log("taskId", taskId);
-    console.log("time_started", time_started);
-    console.log("elapsed_time", elapsed_time);
+//     console.log("taskId", taskId);
+//     console.log("time_started", time_started);
+//     console.log("elapsed_time", elapsed_time);
     
-    let ts = new Date(time_started)
+//     let ts = new Date(time_started)
     
-    let seconds = (Math.floor((now - ts) / 1000)) + elapsed_time
+//     let seconds = (Math.floor((now - ts) / 1000)) + elapsed_time
     
-    console.log("timedelta: ", seconds)
+//     console.log("timedelta: ", seconds)
   
-    timers[taskId] = setInterval(() =>{
-    seconds++
-    let date = new Date(null)
-    date.setSeconds(seconds)
-    let timeStr = date.toISOString().substring(11,11+8)
-    $("#elapsed_time_"+taskId).text(timeStr)
-    }, 1000)
+//     timers[taskId] = setInterval(() =>{
+//     seconds++
+//     let date = new Date(null)
+//     date.setSeconds(seconds)
+//     let timeStr = date.toISOString().substring(11,11+8)
+//     $("#elapsed_time_"+taskId).text(timeStr)
+//     }, 1000)
     
+//   }
+  
+// ***************** FIX THIS!!! *****************
+//     $(document).on("click", ".pause_btn", () => {
+//       // clear the interval timer to stop the clock counting
+//       console.log($(".pause_btn"))
+//       // clearInterval(tictoc)
+//     })
+// })
+
+// WIP
+$(document).ready(() => {
+  console.log("Task Timer page is ready")
+  
+  let tasksData = JSON.parse(document.getElementById("running_task").textContent) 
+  
+  const timers = {}
+  const timers2 = tasksData
+
+  for (task in tasksData) {
+    if (tasksData[task]["time_started"]){
+      let date = tasksData[task]["time_started"].split("T")[0]
+      let time = tasksData[task]["time_started"].split("T")[1].split(".")[0]
+
+      let newDate = new Date()
+      let testDate = new Date(date)
+
+      console.log(date, time)
+      console.log("New Date: ", newDate)
+      console.log("Test Date: ", testDate)
+    }
+
+    timers[task] = {"is_running": tasksData[task]["is_running"], "time_started": new Date(tasksData[task]["time_started"])}
   }
 
-    $(document).on("click", ".pause_btn", () => {
-      // clear the interval timer to stop the clock counting
-      clearInterval(tictoc)
-    })
+  // Get local Storage
+  let ls = localStorage.getItem("timers")
+
+  if (ls) {
+    console.log("timers saved in local storage: ", timers)
+  } 
+  else {
+    console.log("No local storage saved")
+    const timers = {}
+    console.log("timers saved in local storage: ", timers)
+  }
+
+  // Get tasks 
+
+  let taskRows = $(".task_row")
+
+  // $(taskRows).each(()=>{
+  //   let taskRowId = $(element).prop("id")
+  //   let taskId = taskRowId.split("_")[2]
+  //   if (!timers[taskRowId]){
+  //     timers[taskId] = {startTime: }
+  //   }
+  // })
+
+  $(".pause_btn").click(() => {
+    let btnId = $(".pause_btn").prop("id")
+    let taskId = btnId.split("_")[2] 
+
+    console.log("Pause Button Clicked: ", btnId)
+
+    console.log(taskId)
+
+  })
 })
