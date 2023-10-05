@@ -91,16 +91,12 @@ def get_users_task_stats_today(users_tasks_today):
     todays_task_count = len(users_tasks_today.exclude(ancillary_code="Break"))
     print("Total Tasks Today: ", todays_task_count)
 
-    # Get Running task info
-    running_task = users_tasks_today.filter(is_running=True).first()
-    if running_task is None:
-        running_task_info = None
-    else:
-        running_task_info = {
-            "id": running_task.id, 
-            "time_started": running_task.time_started, 
-            "elapsed_time": running_task.elapsed_time.seconds
-        }
+    # Get Tasks info
+    tasks_info = {}
+    for task in users_tasks_today:
+        tasks_info[task.id] = {"is_running": task.is_running,
+                             "time_started": task.time_started
+                             }
     
     todays_stats= {
         "total_hrs": todays_total_hrs,
@@ -109,7 +105,7 @@ def get_users_task_stats_today(users_tasks_today):
         "design_hrs": design_hrs,
         "design_mins": design_mins,
         "task_count": todays_task_count,
-        "running_task": running_task_info,
+        "tasks_info": tasks_info,
     }
     print("Total Tasks Stats: ", todays_stats)
     return todays_stats
