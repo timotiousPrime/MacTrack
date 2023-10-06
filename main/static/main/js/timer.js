@@ -208,48 +208,51 @@
   
 // ***************** FIX THIS!!! *****************
 //     $(document).on("click", ".pause_btn", () => {
-//       // clear the interval timer to stop the clock counting
-//       console.log($(".pause_btn"))
-//       // clearInterval(tictoc)
-//     })
-// })
-
-// WIP
-$(document).ready(() => {
-  console.log("Task Timer page is ready")
+  //       // clear the interval timer to stop the clock counting
+  //       console.log($(".pause_btn"))
+  //       // clearInterval(tictoc)
+  //     })
+  // })
   
-  let tasksData = JSON.parse(document.getElementById("running_task").textContent) 
-  
-  const timers = {}
-  const timers2 = tasksData
+  // WIP
+  $(document).ready(() => {
+    console.log("Task Timer page is ready")
+    
+    let tasksData = JSON.parse(document.getElementById("running_task").textContent) 
+    let runningTask
+  // let ls = localStorage.getItem("timers")
+  // if (ls) {
+  //   console.log("timers saved in local storage: ", timers)
+  //   timers = {}
+  // } 
+  // else {
+  //   console.log("No local storage saved")
+  //   const timers = {}
+  //   console.log("timers saved in local storage: ", timers)
+  // }
 
   for (task in tasksData) {
-    if (tasksData[task]["time_started"]){
-      let date = tasksData[task]["time_started"].split("T")[0]
-      let time = tasksData[task]["time_started"].split("T")[1].split(".")[0]
+    console.log("Task: ", task)
+    if (tasksData[task]["is_running"]){
 
-      let newDate = new Date()
-      let testDate = new Date(date)
-
-      console.log(date, time)
-      console.log("New Date: ", newDate)
-      console.log("Test Date: ", testDate)
+      let startDate = new Date(tasksData[task]["time_started"])
+      let elapsed_time = new Date(tasksData[task]["elapsed_time"])
+      console.log("Elapsed Time: ", tasksData[task]["elapsed_time"])
+      let now = new Date()
+      let seconds = (Math.floor((now - startDate) / 1000))
+      let date = new Date(null)
+      date.setSeconds(seconds)
+      let timeStr = date.toISOString().substring(11,11+8)
+      console.log("Elapsed Time in seconds", seconds)
+      console.log("Time String: ", timeStr)
+      runningTask = setInterval(() => {
+        
+      })            
     }
-
-    timers[task] = {"is_running": tasksData[task]["is_running"], "time_started": new Date(tasksData[task]["time_started"])}
   }
 
   // Get local Storage
-  let ls = localStorage.getItem("timers")
 
-  if (ls) {
-    console.log("timers saved in local storage: ", timers)
-  } 
-  else {
-    console.log("No local storage saved")
-    const timers = {}
-    console.log("timers saved in local storage: ", timers)
-  }
 
   // Get tasks 
 
