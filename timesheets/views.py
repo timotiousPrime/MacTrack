@@ -39,12 +39,8 @@ def create_task(request):
             task.is_running = True
             task.save()
 
-            todays_tasks = TaskTime.objects.filter(user=request.user.id, date_created__date=today)
-            running_task_info = {"id": task.id, "time_started": task.time_started, "elapsed_time": task.elapsed_time.seconds}
-            context = {
-                "todays_tasks": todays_tasks,
-                "running_task": running_task_info
-            }
+            # Context: title, task_timer_form, todays_tasks, todays_stats
+            context = get_task_timer_context(request.user.id)
             render(request, "partials/usersTodaysTaskTable.html", context)
 
     return redirect("Task_Timer")
