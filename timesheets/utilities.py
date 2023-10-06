@@ -70,8 +70,6 @@ def update_ongoing_tasks(userId):
             newTask = TaskTime(user=user, ancillary_code=og[1], description=og[2], job_code=og[0], is_ongoing=True, is_running=False, elapsed_time=timedelta(0))
             newTask.save()
 
-    print ("Ongoing Tasks: ", og_tasks)
-
 
 def get_users_task_stats_today(users_tasks_today):
     # Total time
@@ -89,13 +87,13 @@ def get_users_task_stats_today(users_tasks_today):
 
     # Tasks Count
     todays_task_count = len(users_tasks_today.exclude(ancillary_code="Break"))
-    print("Total Tasks Today: ", todays_task_count)
 
     # Get Tasks info
     tasks_info = {}
     for task in users_tasks_today:
         tasks_info[task.id] = {"is_running": task.is_running,
-                             "time_started": task.time_started
+                             "time_started": task.time_started,
+                             "elapsed_time": task.elapsed_time
                              }
     
     todays_stats= {
@@ -107,7 +105,6 @@ def get_users_task_stats_today(users_tasks_today):
         "task_count": todays_task_count,
         "tasks_info": tasks_info,
     }
-    print("Total Tasks Stats: ", todays_stats)
     return todays_stats
 
 
