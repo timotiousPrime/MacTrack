@@ -1,3 +1,5 @@
+# Django Shortcuts
+from django.shortcuts import get_object_or_404
 # Import Models
 from .models import TaskTime
 from django.contrib.auth.models import User
@@ -38,6 +40,13 @@ def calculate_total_time(tasks):
 #         # task.delete()
 
 
+def stop_timer(task):
+    task.is_running = False
+    task.time_stopped = timezone.now()
+    task.get_elapsed_time()
+    task.date_edited = timezone.now()
+    task.save()
+
 def stop_running_tasks(userId):
     running_tasks = TaskTime.objects.filter(user=userId, is_running=True)
     for rt in running_tasks:
@@ -46,7 +55,6 @@ def stop_running_tasks(userId):
         rt.get_elapsed_time()
         rt.date_edited = timezone.now()
         rt.save()
-
 
 def update_ongoing_tasks(userId):
     today = timezone.localdate()
@@ -59,6 +67,7 @@ def update_ongoing_tasks(userId):
     
     # Create a set of on going tasks with no duplicates of job code, ancillary code and description
     og_tasks = {(t.job_code, t.ancillary_code, t.description) for t in ongoing_tasks}
+
     
     # Check if any of the ongoing tasks are in todays tasks already, if not create new ongoing tasks for today
     for og in og_tasks:
@@ -93,7 +102,7 @@ def get_users_task_stats_today(users_tasks_today):
     for task in users_tasks_today:
         tasks_info[task.id] = {"is_running": task.is_running,
                              "time_started": task.time_started,
-                             "elapsed_time": task.elapsed_time
+                             "elapsed_time": task.elapsed_time.seconds
                              }
     
     todays_stats= {
