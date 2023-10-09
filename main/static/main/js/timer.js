@@ -215,39 +215,58 @@
   // })
   
   // WIP
+  let timers = {}
   $(document).ready(() => {
+    // Clear / Set timers
+    if (timers["timer"]){
+      clearInterval(timers["timer"])
+    } else {
+      timers["timer"] = null
+    }
     console.log("Task Timer page is ready")
     
     let tasksData = JSON.parse(document.getElementById("running_task").textContent) 
-    let runningTask
-  // let ls = localStorage.getItem("timers")
-  // if (ls) {
-  //   console.log("timers saved in local storage: ", timers)
-  //   timers = {}
-  // } 
-  // else {
-  //   console.log("No local storage saved")
-  //   const timers = {}
-  //   console.log("timers saved in local storage: ", timers)
-  // }
-
+ 
   for (task in tasksData) {
-    console.log("Task: ", task)
+    console.log("Task: ", task, tasksData[task]['elapsed_time'])
     if (tasksData[task]["is_running"]){
 
+      // Get existing elapsed Time
+      // Recieve elapsed time in seconds
+      let elapsed_seconds = tasksData[task]['elapsed_time']
+
+      // Get time started
       let startDate = new Date(tasksData[task]["time_started"])
-      let elapsed_time = new Date(tasksData[task]["elapsed_time"])
-      console.log("Elapsed Time: ", tasksData[task]["elapsed_time"])
       let now = new Date()
       let seconds = (Math.floor((now - startDate) / 1000))
-      let date = new Date(null)
-      date.setSeconds(seconds)
-      let timeStr = date.toISOString().substring(11,11+8)
-      console.log("Elapsed Time in seconds", seconds)
-      console.log("Time String: ", timeStr)
-      runningTask = setInterval(() => {
-        
-      })            
+      console.log("Seconds since started: ", seconds)
+
+      // Add Existing elapsed time to time from time started for TotalTime
+      total_seconds = elapsed_seconds + seconds
+      // Get hours, minutes and seconds
+      hours = Math.floor(total_seconds / 3600)
+      minutes = Math.floor((total_seconds / 60)%60)
+      seconds = Math.floor(total_seconds % 60)
+      console.log(hours, minutes, seconds)
+      // Display total time
+      display_time = hours + ":" + minutes + ":" + seconds 
+
+      if (timers["timer"] !== null){
+        clearInterval(timers["timer"])
+      }
+
+      timers["timer"] = setInterval(() => {
+        seconds++
+        if (seconds == 60){
+          seconds = 0
+          minutes++
+          if (minutes == 60) {
+            minutes = 0
+            hours++
+          }  
+        }
+        console.log(hours, minutes, seconds)
+      }, 1000)            
     }
   }
 
