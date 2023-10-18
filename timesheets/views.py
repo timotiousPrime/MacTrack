@@ -70,9 +70,9 @@ def update_ongoing(request, task_id):
 
 def start_timer(request, task_id):
     userId = request.user.id
-    today = timezone.localdate()
+    # today = timezone.localdate()
     task = TaskTime.objects.get(id=task_id)
-    todays_tasks = TaskTime.objects.filter(user=userId, date_created__date=today).exclude(elapsed_time=None)
+    # todays_tasks = TaskTime.objects.filter(user=userId, date_created__date=today).exclude(elapsed_time=None)
     if not task.is_running:
         if request.method == "POST":
             stop_running_tasks(userId)
@@ -80,12 +80,9 @@ def start_timer(request, task_id):
             task.time_started = timezone.now()
             task.date_edited = timezone.now()
             task.save()
-            running_task_info = {"id": task.id, "time_started":  task.time_started, "elapsed_time": task.elapsed_time.seconds}
-            context = {
-                "task": task,
-                "todays_tasks": todays_tasks,
-                "running_task": running_task_info,
-            }
+            # running_task_info = {"id": task.id, "time_started":  task.time_started, "elapsed_time": task.elapsed_time.seconds}
+            # Context: title, task_timer_form, todays_tasks, todays_stats
+            context = get_task_timer_context(request.user.id)
             return render(request, "partials/usersTodaysTaskTable.html", context)
 
     return redirect("Task_Timer")
