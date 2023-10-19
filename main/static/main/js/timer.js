@@ -215,21 +215,103 @@
   // })
   
   // WIP
-  let timers = {}
-  $(document).ready(() => {
-    // Clear / Set timers
-    if (timers["timer"]){
-      clearInterval(timers["timer"])
-    } else {
-      timers["timer"] = null
-    }
-    console.log("Task Timer page is ready")
+
+  // $(document).ready(() => {
+  //   if (!timers) {
+  //     const timers = null
     
-    let tasksData = JSON.parse(document.getElementById("running_task").textContent) 
+
+  //   // Clear / Set timers
+  //   if (timers){
+  //     clearInterval(timers["timer"])
+  //   } else {
+  //     timers["timer"] = null
+  //   }
+  //   console.log("Task Timer page is ready")
+    
+  //   let tasksData = JSON.parse(document.getElementById("running_task").textContent) 
  
-  for (task in tasksData) {
-    console.log("Task: ", task, tasksData[task]['elapsed_time'])
+  // for (task in tasksData) {
+  //   console.log("Task: ", task, tasksData[task]['elapsed_time'])
+  //   if (tasksData[task]["is_running"]){
+
+  //     // Get existing elapsed Time
+  //     // Recieve elapsed time in seconds
+  //     let elapsed_seconds = tasksData[task]['elapsed_time']
+
+  //     // Get time started
+  //     let startDate = new Date(tasksData[task]["time_started"])
+  //     let now = new Date()
+  //     let seconds = (Math.floor((now - startDate) / 1000))
+  //     console.log("Seconds since started: ", seconds)
+
+  //     // Add Existing elapsed time to time from time started for TotalTime
+  //     total_seconds = elapsed_seconds + seconds
+  //     // Get hours, minutes and seconds
+  //     hours = Math.floor(total_seconds / 3600)
+  //     minutes = Math.floor((total_seconds / 60) % 60)
+  //     seconds = Math.floor(total_seconds % 60)
+  //     console.log(hours, minutes, seconds)
+  //     // Display total time
+  //     display_time = hours + ":" + minutes + ":" + seconds 
+
+  //     if (timers["timer"] !== null){
+  //       clearInterval(timers["timer"])
+  //     }
+
+  //     timers["timer"] = setInterval(() => {
+  //       seconds++
+  //       if (seconds == 60){
+  //         seconds = 0
+  //         minutes++
+  //         if (minutes == 60) {
+  //           minutes = 0
+  //           hours++
+  //         }  
+  //       }
+  //       console.log(hours, minutes, seconds)
+  //     }, 1000)            
+  //   }
+  //   }
+  // }
+
+  // Get local Storage
+
+
+  // Get tasks 
+
+  // let taskRows = $(".task_row")
+
+  // $(".pause_btn").click(() => {
+  //   let btnId = $(".pause_btn").prop("id")
+  //   let taskId = btnId.split("_")[2] 
+
+  //   console.log("Pause Button Clicked: ", btnId)
+
+  //   console.log(taskId)
+
+  //   clearInterval(timers["timer"])
+
+  // })
+// })
+
+$(document).ready(() => {
+  console.log("Page has loaded")
+
+  // Check for running tasks
+  let tasksData = JSON.parse(document.getElementById("running_task").textContent) 
+  
+  // Check for when start btn is clicked
+  $(".start_btn").on("click", (e)=> {
+    // I dont know why this only works when I dont declare "timer", but it works 
+    clearInterval(timer)
+  })
+
+
+  for (task in tasksData){
+
     if (tasksData[task]["is_running"]){
+      let taskId = task
 
       // Get existing elapsed Time
       // Recieve elapsed time in seconds
@@ -239,23 +321,16 @@
       let startDate = new Date(tasksData[task]["time_started"])
       let now = new Date()
       let seconds = (Math.floor((now - startDate) / 1000))
-      console.log("Seconds since started: ", seconds)
 
       // Add Existing elapsed time to time from time started for TotalTime
-      total_seconds = elapsed_seconds + seconds
+      let total_seconds = elapsed_seconds + seconds
       // Get hours, minutes and seconds
-      hours = Math.floor(total_seconds / 3600)
-      minutes = Math.floor((total_seconds / 60)%60)
+      let hours = Math.floor(total_seconds / 3600)
+      let minutes = Math.floor((total_seconds / 60) % 60)
       seconds = Math.floor(total_seconds % 60)
-      console.log(hours, minutes, seconds)
-      // Display total time
-      display_time = hours + ":" + minutes + ":" + seconds 
-
-      if (timers["timer"] !== null){
-        clearInterval(timers["timer"])
-      }
-
-      timers["timer"] = setInterval(() => {
+      
+      // I dont know why this only works when I dont declare "timer", but it works 
+      timer = setInterval(() => {
         seconds++
         if (seconds == 60){
           seconds = 0
@@ -265,33 +340,35 @@
             hours++
           }  
         }
-        console.log(hours, minutes, seconds)
-      }, 1000)            
+
+        let displayMin = ""
+        let displaySec = ""
+
+        if (minutes < 10){
+          displayMin = `${0}${minutes}`
+        }
+        else {
+          displayMin = minutes
+        }
+
+        if (seconds < 10){
+          displaySec = `${0}${seconds}`
+        }
+        else {
+          displaySec = seconds
+        }
+
+        let elapsedTimeId = "#elapsed_time_" + taskId
+        $(elapsedTimeId).text(hours + ":" + displayMin + ":" + displaySec)
+        // $("#elapsed_time_" + tasksData[task]["id"]).text(hours + ":" + minutes + ":" + seconds)
+        }, 1000) 
+        localStorage.setItem("timer", timer)
     }
-  }
-
-  // Get local Storage
+ }
 
 
-  // Get tasks 
-
-  let taskRows = $(".task_row")
-
-  // $(taskRows).each(()=>{
-  //   let taskRowId = $(element).prop("id")
-  //   let taskId = taskRowId.split("_")[2]
-  //   if (!timers[taskRowId]){
-  //     timers[taskId] = {startTime: }
-  //   }
-  // })
-
-  $(".pause_btn").click(() => {
-    let btnId = $(".pause_btn").prop("id")
-    let taskId = btnId.split("_")[2] 
-
-    console.log("Pause Button Clicked: ", btnId)
-
-    console.log(taskId)
-
+// Check for when pause btn is clicked
+  $(".pause_btn").on("click", (e)=> {
+    clearInterval(timer)
   })
 })
