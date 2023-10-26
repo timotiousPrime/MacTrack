@@ -111,3 +111,8 @@ def dashboard_project_times_chart(request):
 
     return render(request, "reports/taskTimerPage.html", context)
 
+def admin_reports_page(request):
+    context = {
+        "title": "Admin Reports"
+    }
+    return render(request, "reports/adminReportPage.html", context)
