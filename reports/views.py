@@ -1,9 +1,16 @@
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
-from timesheets.models import TaskTime
-from .templates.graphs.barChart import get_graph_components
+from django.contrib.auth.decorators import user_passes_test
 from django.utils import timezone
 
+# Import Utilites
+from .utilities import adminReportsContext
 
+# Import graph components
+from .templates.graphs.barChart import get_graph_components
+
+# Import app models
+from timesheets.models import TaskTime
+from members.models import User_Profile
 
 # Create your views here.
 
@@ -111,8 +118,12 @@ def dashboard_project_times_chart(request):
 
     return render(request, "reports/taskTimerPage.html", context)
 
+
+def admin_check(user):
+    userProfile = User_Profile.objects.get(user=user.id)
+    return userProfile.role.startswith("Adm")
+
+@user_passes_test(admin_check, login_url='/reports/taskTimers/')
 def admin_reports_page(request):
-    context = {
-        "title": "Admin Reports"
-    }
+    context = adminReportsContext()
     return render(request, "reports/adminReportPage.html", context)
