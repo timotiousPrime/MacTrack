@@ -1,0 +1,54 @@
+<div class="card">
+    <h5 class="card-header">Designers Daily Task Times</h5>
+    <div class="card-body">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">
+              Date
+            </th>
+            <th scope="col">
+              Designer
+            </th>
+            <th scope="col">
+              Job Code
+            </th>
+            <th scope="col">
+              Description
+            </th>
+            <th scope="col">
+              Machine Type
+            </th>
+            <th scope="col">
+                Time Spent
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for designer in designersTaskTimes %}
+            <tr>
+              <td scope="row">
+                {{ designer }}
+              </td>
+              <td scope="row">
+                {{ designer }}
+              </td>
+              <td scope="row">
+                {{ designer }}
+              </td>
+              <td scope="row">
+                {{ designer }}
+              </td>
+              <td scope="row">
+                {{ designer }}
+              </td>
+              <td scope="row">
+                {{ designer }}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <a href="{% url 'User_Task_History' user.username %}" class="btn btn-primary">See Full History</a>
+    </div>
+  </div>
