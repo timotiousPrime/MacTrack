@@ -51,8 +51,14 @@ def user_profile(request, username):
                     print("Adm logging in!")
                     context = getAdminDashboardContext()
                     template = 'members/adminDashboard.html'
+                case "Man":
+                    print("Manager logging in!")
+                    context = getDesignerDashboardContext(userId.id)
+                    template = 'members/userProfile.html'
                 case _:
-                    print("Not valid user")
+                    print("Unknown users type logging in!", up.role)
+                    context = getDesignerDashboardContext(userId.id)
+                    template = 'members/userProfile.html'
     
     return render(request, template, context)
 
