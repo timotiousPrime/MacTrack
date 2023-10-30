@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import user_passes_test, login_required
 from django.utils import timezone
 
 # Import Utilites
@@ -123,7 +123,20 @@ def admin_check(user):
     userProfile = User_Profile.objects.get(user=user.id)
     return userProfile.role.startswith("Adm")
 
+@login_required
 @user_passes_test(admin_check, login_url='/reports/taskTimers/')
 def admin_reports_page(request):
     context = adminReportsContext()
     return render(request, "reports/adminReportPage.html", context)
+
+
+@login_required
+@user_passes_test(admin_check, login_url='/reports/taskTimers/')
+def full_task_time_report(request):
+    context = {
+        "title": "Task Times Report",
+        "tasks": TaskTime.objects.all().exclude(elapsed_time=None).order_by("-date_created", "user", "job_code", "ancillary_code", "description")
+    }
+    return render(request, "reports/taskTimeReport.html", context)
+
+
