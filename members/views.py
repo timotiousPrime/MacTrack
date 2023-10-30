@@ -5,6 +5,8 @@ from django.contrib.auth.decorators import login_required
 from members.forms import Login_Form
 from timesheets.models import TaskTime
 from .templates.graphs.barChart import get_graph_components
+from members.models import User_Profile
+from .utilities import getAdminDashboardContext, getDesignerDashboardContext
 
 # Create your views here.
 
@@ -20,6 +22,7 @@ def login_view(request):
             }
             return render (request, 'members/loginPage.html', context)
         else:
+            
             login(request, user)
             print ("User has been authenticated!")
             print (user)
@@ -37,40 +40,21 @@ def logout_view(request):
 
 @login_required
 def user_profile(request, username):
-    # Get all task times 
-    user_task_times = TaskTime.objects.filter(user=request.user.id).exclude(elapsed_time=None)
-
-    # Add up all the time for each job code
-    job_code_hours = {}
-
-    for t in user_task_times:
-        if t.job_code not in job_code_hours:
-            job_code_hours[t.job_code] = (t.elapsed_time.seconds / 3600)
-        else:
-            job_code_hours[t.job_code] += (t.elapsed_time.seconds  / 3600)
-
-    # We need lists for the input for the x and y axis's respectively
-    jc_list = [project.job_code for project in job_code_hours.keys()]
-    print("Job Codes: ", jc_list)
-    et_list = list(job_code_hours.values())
-    print("Elapsed Times: ",et_list)
+    userId = User.objects.get(username=username)
+    up = User_Profile.objects.get(user_id = userId)
+    match up.role:
+                case "Des":
+                    print("Des logging in!")
+                    context = getDesignerDashboardContext(userId.id)
+                    template = 'members/userProfile.html'
+                case "Adm":
+                    print("Adm logging in!")
+                    context = getAdminDashboardContext()
+                    template = 'members/adminDashboard.html'
+                case _:
+                    print("Not valid user")
     
-    script, div = get_graph_components(jc_list, et_list)
-
-    # Get user Task times for history 
-    user = get_object_or_404(User, username=username)
-    # user_tasks = get_list_or_404(TaskTime, user)
-    user_tasks = list(TaskTime.objects.filter(user=user).exclude(elapsed_time=None).order_by('-id'))[:5]
-
-    context = {
-        "title": "Dashboard",
-        'user': user,
-        'user_tasks': user_tasks,
-        "reports": "Here are some task timer reports",
-        "script": script,
-        "div": div
-    }
-    return render(request, 'members/userProfile.html', context)
+    return render(request, template, context)
 
 @login_required
 def user_task_history(request, username):
