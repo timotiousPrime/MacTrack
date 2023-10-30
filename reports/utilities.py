@@ -7,22 +7,10 @@ from members.models import User_Profile
 # Utility functions for report views
 
 def adminReportsContext():
-    designers = User_Profile.objects.filter(role="Des")
     
-    designersTaskTimes = {}
+    tasks = TaskTime.objects.all().exclude(elapsed_time=None).order_by("-date_created", "user", "job_code", "ancillary_code", "description")[:5]
 
-    for designer in designers:
-        designerTaskTimes = TaskTime.objects.filter(user=designer.user.id)
-        designersTaskTimes[designer] = designerTaskTimes
-    
-    print(designersTaskTimes)
-
-    # Designer Task Times Stats
-    # {"Designer": DesignerUsername, "ProjectCount": TotalProjects, "AccumulatedMonthlyTime"}
-    
     return {
         "title": "Admin Reports",
-        "designers": designers,
-        "designerTaskTimes": designersTaskTimes
-
+        "tasks": tasks
     }
