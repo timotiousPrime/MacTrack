@@ -25,30 +25,30 @@
           </tr>
         </thead>
         <tbody>
-          {% for designer in designersTaskTimes %}
+          {% for t in tasks %}
             <tr>
               <td scope="row">
-                {{ designer }}
+                {{ t.date_created | date:"d M Y" }}
               </td>
               <td scope="row">
-                {{ designer }}
+                {{ t.user }}
               </td>
               <td scope="row">
-                {{ designer }}
+                {{ t.job_code }}
               </td>
               <td scope="row">
-                {{ designer }}
+                {{ t.description }}
               </td>
               <td scope="row">
-                {{ designer }}
+                {{ t.ancillary_code }}
               </td>
               <td scope="row">
-                {{ designer }}
+                {{ t.elapsed_time }}
               </td>
             </tr>
           {% endfor %}
         </tbody>
       </table>
-      <a href="{% url 'User_Task_History' user.username %}" class="btn btn-primary">See Full History</a>
+      <a href="{% url 'Task_Time_Report' %}" class="btn btn-primary">See Full History</a>
     </div>
   </div>
