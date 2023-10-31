@@ -136,3 +136,27 @@ def delete_timer(request, task_id):
         return HttpResponse(status=200)
 
     return redirect("Task_Timer")
+
+
+def task_history_edit_timer(request, task_id):
+    task = TaskTime.objects.get(id=task_id)
+    if request.method == "POST":
+        form = Task_Timer_Form(request.POST or None, instance=task)
+        if form.is_valid():
+            task.date_edited = timezone.now()
+            task.save()
+            
+            context = get_task_timer_context(request.user.id)
+            return render(request, "partials/taskTimer.html", context)
+
+    if request.method == "GET":
+        print("********Getting Edit view********")
+        form = Task_Timer_Form(instance=task)
+        context = {
+            "form": form,
+            "task": task,
+        }
+        return render(request, "timesheets/edit.html", context)
+    template = ""
+    context = {}
+    return redirect("User_Task_History")
