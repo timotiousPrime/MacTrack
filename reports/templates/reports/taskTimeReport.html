@@ -21,7 +21,7 @@
                 <td>{{ task.date_created | date:"d M Y" }}</td>
                 <td>{{ task.user }}</td>
                 <td>{{ task.job_code }}</td>
-                <td>{{ task.description }}</td>
+                <td>{{ task.get_description_display }}</td>
                 <td>{{ task.ancillary_code }}</td>
                 <td>{{ task.elapsed_time }}</td>
             </tr>
