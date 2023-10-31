@@ -1,7 +1,10 @@
 {% extends 'main/base.html' %}
+{% load timesheetTags %}
 
 {% block content %}
 <main class="container-fluid p-4">
+    <form method="POST" class="container">
+    {% csrf_token %}
     <table class="table table-hover">
         <thead>
             <tr>
@@ -11,21 +14,66 @@
                 <th scope="col">Description</th>
                 <th scope="col">Time Spent</th>
                 <th scope="col">Ongoing</th>
+                <th scope="col"></th>
             </tr>
         </thead>
         <tbody>
             {% for task in user_tasks %}
             <tr scope="row">
-                <td>{{ task.date_created }}</td>
+                <td>{{ task.date_created|date }}</td>
                 <td>{{ task.job_code }}</td>
                 <td>{{ task.ancillary_code }}</td>
-                <td>{{ task.description }}</td>
+                <td>{{ task.get_description_display }}</td>
                 <td>{{ task.elapsed_time }}</td>
-                <td>{{ task.is_ongoing }}</td>
+                <td >
+                    {% if task.is_ongoing %}
+                    <div class="spinner-border spinner-border-sm text-info" role="status">
+                        <span class="visually-hidden">
+                            {{ task.is_ongoing }}
+                        </span>
+                    </div>
+                    {% endif %}
+                </td>
+                {% if task.date_created|isEditable %}
+                <td>
+                    <button 
+                    id="edit_task_{{ task.id }}" 
+                    class="btn btn-warning edit_btn btn-sm" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#editModal" 
+                    hx-get="{% url 'Edit_Timer' task.id %}" 
+                    hx-target="#dialog"
+                    hx-swap="innerHTML"
+                    >
+                    Edit
+                    </button>
+                    {% if not task.is_ongoing %}
+                      <button 
+                      id="delete_task_{{ task.id }}" 
+                      class="btn btn-danger delete_btn btn-sm" 
+                      hx-post="{% url 'Delete_Timer'  task.id %}" 
+                      hx-confirm="Are you sure you want to delete this?" 
+                      >
+                      Delete
+                      </button>
+                    {% endif %}
+                    </td>
+                {% else %}
+                    <td></td>
+                {% endif %}
             </tr>
             {% endfor %}
         </tbody>
     </table>
+    </form>
+
+
+    <!-- Modal for edit interface -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div id="dialog" class="modal-dialog">
+        <!-- Inject Modal HTML in here -->
+        </div>
+    </div>
 </main>
 
 {% endblock %}
