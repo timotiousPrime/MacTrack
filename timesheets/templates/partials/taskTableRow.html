@@ -1,49 +1,45 @@
+{% load timesheetTags %}
+
 <tr id="task_{{ task.id }}" class="task_row {% if task.is_running %} active {% endif %}">
-    <td id="date_created_{{ task.id }}" class="col-2 task_created_date" scope="col">
-      {{ task.date_created|date:"d-m-Y" }}
-    </td>
-    <td id="job_code_{{ task.id }}" class="col-2 task_job_code editable" scope="col ">
-      {{ task.job_code }}
-    </td>
-    <td id="ancillary_job_code_{{ task.id }}" class="col-2 task_ancillary_job_code editable" scope="col ">
-      {{ task.ancillary_code }}
-    </td>
-    <td id="description_{{ task.id }}" class="col-2 task_elapsed_time editable" scope="col">
-      {{ task.get_description_display }}
-    </td>
-    <td id="elapsed_time_{{ task.id }}" class="col-2 elapsed_time_value" scope="col">
-      {{ task.elapsed_time }}
-    </td>
-    <td id="is_ongoing_{{ task.id }}" class="col-1" scope="col">
-      <div class="form-check form-switch">
-        <input 
-        role="switch" 
-        class="form-check-input" 
-        type="checkbox" 
-        {% if task.is_ongoing %} checked {% endif %}
-        id="is_ongoing_{{ task.id }}"
-        hx-post="{% url 'Update_Ongoing' task.id %}"
-        hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
-        hx-trigger="change"
-        hx-target="#todaysTasks"
-        hx-swap="outerHTML"
-        >
+  <td>{{ task.date_created|date }}</td>
+  <td>{{ task.job_code }}</td>
+  <td>{{ task.ancillary_code }}</td>
+  <td>{{ task.get_description_display }}</td>
+  <td>{{ task.elapsed_time }}</td>
+  <td >
+    {% if task.is_ongoing %}
+      <div class="spinner-border spinner-border-sm text-info" role="status">
+          <span class="visually-hidden">
+              {{ task.is_ongoing }}
+          </span>
       </div>
-    </td>
-    <td class="col-2" scope="col">
-        <div 
-        id="task_{{ task.id }}_btn_group" 
-        class="container btn-group btn-group-sm {% if task.is_running %} active {% endif %}" 
-        role="group" .
-        aria-label="Basic mixed styles example"
-        hx-target="this"
-        hx-swap="outerHTML"
+    {% endif %}
+  </td>
+  {% if task.date_created|isEditable %}
+  <td>
+      <button 
+      id="edit_task_{{ task.id }}" 
+      class="btn btn-warning edit_btn btn-sm" 
+      data-bs-toggle="modal" 
+      data-bs-target="#editModal" 
+      hx-get="{% url 'Edit_User_Task_History' task.id %}" 
+      hx-target="#task_{{ task.id }}"
+      hx-swap="outerHTML"
+      >
+      Edit
+      </button>
+      {% if not task.is_ongoing %}
+        <button 
+        id="delete_task_{{ task.id }}" 
+        class="btn btn-danger delete_btn btn-sm" 
+        hx-post="{% url 'Delete_Timer'  task.id %}" 
+        hx-confirm="Are you sure you want to delete this?" 
         >
-          {% if task.is_running %}
-            {% include 'partials/startBtnOptions.html' %}
-          {% else %}
-            {% include 'partials/pauseBtnOptions.html' %}
-          {% endif %}
-        </div>
-    </td>
+        Delete
+        </button>
+      {% endif %}
+      </td>
+  {% else %}
+      <td></td>
+  {% endif %}
 </tr>
