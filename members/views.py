@@ -65,7 +65,7 @@ def user_profile(request, username):
 @login_required
 def user_task_history(request, username):
     print(username)
-    user_tasks = TaskTime.objects.filter(user=request.user.id).exclude(elapsed_time=None).order_by('-id')
+    user_tasks = TaskTime.objects.filter(user=request.user.id).order_by('-id')
     context = {
         "title": "Task History",
         "user_tasks": user_tasks
