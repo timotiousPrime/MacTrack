@@ -2,27 +2,10 @@
 {% load timesheetTags %}
 
 {% block content %}
-<main class="container-fluid p-4">
+<main id="taskHistoryContent" class="container-fluid p-4">
     <form method="POST" class="container">
     {% csrf_token %}
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th scope="col">Date Created</th>
-                <th scope="col">Job Code</th>
-                <th scope="col">Ancillary Code</th>
-                <th scope="col">Description</th>
-                <th scope="col">Time Spent</th>
-                <th scope="col">Ongoing</th>
-                <th scope="col"></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for task in user_tasks %}
-                {% include "partials/taskHistoryTableRow.html" %}
-            {% endfor %}
-        </tbody>
-    </table>
+        {% include 'partials/taskHistoryTable.html' %}
     </form>
 
 
