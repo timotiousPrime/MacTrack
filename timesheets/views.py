@@ -156,11 +156,12 @@ def edit_timer_task_history(request, task_id):
         if form.is_valid():
             task.date_edited = timezone.now()
             task.save()
-            
-            context = get_task_timer_context(request.user.id)
-            print("user: ", request.user.id)
-            print("task date created: ", task.date_created)
-            return render(request, "partials/taskHistoryTableRow.html", context)
+            user_tasks = TaskTime.objects.filter(user=request.user.id).order_by('-id')
+            context = {
+                "title": "Task History",
+                "user_tasks": user_tasks
+                }
+            return render(request, "partials/taskHistoryTable.html", context)
 
     if request.method == "GET":
         print("********Getting Edit view********")
