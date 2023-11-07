@@ -28,7 +28,6 @@
         </thead>
         <tbody>
           {% for t in tasks %}
-          {% if t.elapsed_time|hasTime %}
             <tr>
               <td scope="row">
                 {{ t.date_created | date:"d M Y" }}
@@ -49,7 +48,6 @@
                 {{ t.elapsed_time }}
               </td>
             </tr>
-          {% endif %}
           {% endfor %}
         </tbody>
       </table>
