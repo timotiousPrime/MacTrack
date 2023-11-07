@@ -8,6 +8,5 @@ register = template.Library()
 def isEditable(value):
     now = timezone.now()
     aWeekAgo = now-timedelta(days=7)
-    print(value, type(value), type(aWeekAgo))
     return value > aWeekAgo
 
