@@ -6,7 +6,8 @@ from members.forms import Login_Form
 from timesheets.models import TaskTime
 from .templates.graphs.barChart import get_graph_components
 from members.models import User_Profile
-from .utilities import getAdminDashboardContext, getDesignerDashboardContext
+from .utilities import getAdminDashboardContext, getDesignerDashboardContext, getManagerDashboardContext, getFitterDashboardContext, getMachinistDashboardContext, getElectricianDashboardContext, getWelderDashboardContext, getGeneralDashboardContext
+
 
 # Create your views here.
 
@@ -53,14 +54,31 @@ def user_profile(request, username):
                     template = 'members/adminDashboard.html'
                 case "Man":
                     print("Manager logging in!")
-                    context = getDesignerDashboardContext(userId.id)
-                    template = 'members/userProfile.html'
+                    context = getManagerDashboardContext(userId.id)
+                    template = 'members/managerProfile.html'
+                case "Fit":
+                    print("Fitter logging in!")
+                    context = getFitterDashboardContext(userId.id)
+                    template = 'members/fitterProfile.html'
+                case "Mac":
+                    print("Machinist logging in!")
+                    context = getMachinistDashboardContext(userId.id)
+                    template = 'members/machinistProfile.html'
+                case "Ele":
+                    print("Electrician logging in!")
+                    context = getElectricianDashboardContext(userId.id)
+                    template = 'members/electricianProfile.html'
+                case "Wel":
+                    print("Welder logging in!")
+                    context = getWelderDashboardContext(userId.id)
+                    template = 'members/welderProfile.html'
                 case _:
-                    print("Unknown users type logging in!", up.role)
-                    context = getDesignerDashboardContext(userId.id)
-                    template = 'members/userProfile.html'
+                    print("General user type logging in!", up.role)
+                    context = getGeneralDashboardContext(userId.id)
+                    template = 'members/generalProfile.html'
     
     return render(request, template, context)
+
 
 @login_required
 def user_task_history(request, username):
