@@ -25,7 +25,7 @@ hx-post="{{ request.path }}" >
             class="btn btn-primary" 
             data-bs-dismiss="modal" 
             hx-post="{% url 'Edit_User_Task_History' task.id %}"
-            hx-target="#task_row_{{ task.id }}"
+            hx-target="#taskHistoryTable"
             hx-swap="outerHTML"
         >
             Save changes
