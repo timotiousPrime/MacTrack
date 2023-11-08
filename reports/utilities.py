@@ -1,8 +1,13 @@
+from django.shortcuts import render
+from datetime import timedelta
+
+# Models 
 from django.contrib.auth.models import User
 from timesheets.models import TaskTime
 from members.models import User_Profile
-from datetime import timedelta
 
+# Import graph components
+from .templates.graphs.barChart import get_graph_components
 
 # Utility functions for report views
 
@@ -48,4 +53,4 @@ def designerReportContext():
         "div": div
     }
 
-    return render(request, "reports/taskTimerPage.html", context)
+    return context
