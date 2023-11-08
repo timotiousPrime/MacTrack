@@ -142,8 +142,12 @@ def delete_history_timer(request, task_id):
     if request.method == "POST":
         task = TaskTime.objects.get(id=task_id)
         task.delete()
-        context = get_task_timer_context(request.user.id)
-        return HttpResponse(status=200)
+        user_tasks = TaskTime.objects.filter(user=request.user.id).order_by('-id')
+        context = {
+            "title": "Task History",
+            "user_tasks": user_tasks
+        }
+        return render(request, "partials/taskHistoryTable.html", context)
 
     return redirect("User_Task_History")
 
