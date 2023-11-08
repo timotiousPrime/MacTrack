@@ -55,7 +55,7 @@ def user_profile(request, username):
                 case "Man":
                     print("Manager logging in!")
                     context = getManagerDashboardContext(userId.id)
-                    template = 'members/managerProfile.html'
+                    template = 'members/userProfile.html'
                 case "Fit":
                     print("Fitter logging in!")
                     context = getFitterDashboardContext(userId.id)
