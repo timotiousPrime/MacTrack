@@ -27,7 +27,7 @@
         data-bs-target="#editHistoryModal" 
         hx-get="{% url 'Edit_User_Task_History' task.id %}" 
         hx-target="#taskHistoryDialog"
-        hx-swap="innerHTML"
+        hx-swap="outerTML"
         >
         Edit
         </button>
@@ -36,9 +36,9 @@
             id="delete_task_{{ task.id }}" 
             class="btn btn-danger delete_btn btn-sm" 
             hx-post="{% url 'Delete_History_Timer'  task.id %}" 
-            hx-target="task_row_{{ task.id }}"
+            hx-confirm="Are you sure you want to delete this?"
+            hx-target="#taskHistoryTable"
             hx-swap="outerHTML"
-            hx-confirm="Are you sure you want to delete this?" 
             >
             Delete
             </button>
