@@ -1,0 +1,35 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+
+<main class="m-4">
+    <span class="addCustomer ">
+        <button 
+            id="addCustomer" 
+            class="btn btn-m btn-primary"
+            type="button"
+            data-bs-toggle="modal" 
+            data-bs-target="#addCustomerModal" 
+            hx-get="{% url 'Add_Customer' %}" 
+            hx-target="#dialog"
+            hx-swap="innerHtml"
+            >
+            New Customer
+        </button>
+    </span>
+    
+    <div class="projectTable">
+        {% include 'partials/customerTable.html' %}
+    </div>
+    
+      
+      <!-- Modal for New Customer interface -->
+        <div class="modal fade" id="addCustomerModal" tabindex="-1" aria-labelledby="addCustomerModalLabel" aria-hidden="true">
+        <div id="dialog" class="modal-dialog">
+          <!-- Inject Modal HTML in here -->
+        </div>
+      </div>
+</main>
+  
+
+{% endblock content %}
