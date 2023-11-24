@@ -11241,3 +11241,9 @@ body {
   font-size: 0.75rem;
   border-radius: 0.375rem !important;
 }
+
+/* *************************** Custom CSS *************************** */
+.selectedRow tr {
+  /* background: var(--bs-highlight-bg) */
+  background-color: blue !important
+}
