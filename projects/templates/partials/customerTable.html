@@ -1,0 +1,22 @@
+<table class="table table-hover ">
+    <thead>
+        <tr>
+            <th scope="col">Customer Name</th>
+            <th scope="col">Customer Code</th>
+            <th scope="col">Contact Person</th>
+            <th scope="col">Email</th>
+            <th scope="col">Phone Number</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for customer in customers %}
+        <tr>
+            <td>{{ customer.name }}</td>
+            <td>{{ customer.code }}</td>
+            <td>{{ customer.contact_person }}</td>
+            <td>{{ customer.email }}</td>
+            <td>{{ customer.phone_number }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
