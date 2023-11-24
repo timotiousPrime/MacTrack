@@ -43,3 +43,48 @@ class ProjectForm(forms.ModelForm):
             ),
             "is_high_priority": forms.CheckboxInput(attrs={"class": "form-check-input"}),
         }
+
+
+class CustomerForm(forms.ModelForm):
+    class Meta:
+        model = Customer
+        fields = (
+            "name", 
+            "code", 
+            "phone_number",
+            "email", 
+            "contact_person", 
+        )
+
+        widgets = {
+            "name": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Customer Name",
+                }
+            ),
+            "code": forms.TextInput(
+                attrs={
+                    "class": "form-control", 
+                    "placeholder": "Customer Code"
+                }
+            ),
+            "phone_number": forms.TextInput(
+                attrs={
+                    "class": "form-control", 
+                    "placeholder": "Phone Number"
+                }
+            ),
+            "email": forms.EmailInput(
+                attrs={
+                    "class": "form-control", 
+                    "placeholder": "Email"
+                }
+            ),
+            "contact_person": forms.TextInput(
+                attrs={
+                    "class": "form-control", 
+                    "placeholder": "Contact Person"
+                }
+            ),
+        }
