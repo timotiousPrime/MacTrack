@@ -1,9 +1,10 @@
 {% extends 'main/base.html' %}
 {% load customTemplateTags %}
+{% load static %}
 
 {% block content %}
 <main class="container-fluid p-4">
-    <table class="table table-hover">
+    <table class="table table-striped table-hover">
         <thead>
             <tr>
                 <th scope="col">Date Created</th>
@@ -17,7 +18,7 @@
         <tbody>
             {% for task in tasks %}
             {% if task.elapsed_time|hasTime %}
-            <tr scope="row">
+            <tr id="task-{{ task.id }}" class="clickableRow" scope="row">
                 <td>{{ task.date_created | date:"d M Y" }}</td>
                 <td>{{ task.user }}</td>
                 <td>{{ task.job_code }}</td>
@@ -30,5 +31,7 @@
         </tbody>
     </table>
 </main>
+
+<script src="{% static 'main/js/selectTableRow.js' %}"></script>
 
 {% endblock %}
