@@ -1,0 +1,29 @@
+{% block modal %}
+
+    <!-- Modal -->
+
+<div class="modal-content">
+    <div class="modal-header">
+        <h2 class="modal-title fs-5" id="addNewCustomerLabel">Add New Customer</h2>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <form action="">
+        {% csrf_token %}
+        <div class="modal-body">
+            {{ customer_form.as_p }}
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button 
+                class="btn btn-primary"
+                type="submit" 
+                formmethod="POST" 
+                formaction="{% url 'Add_Customer' %}" 
+                >
+                Save changes
+            </button>
+    </div>
+    </form>
+</div>
+
+{% endblock modal %}
