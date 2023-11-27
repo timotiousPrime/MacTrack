@@ -4,11 +4,11 @@ $('.clickableRow').on("click", (e) => {
 
     let isSelected = $(tr).hasClass( "selectedRow" )
     
-    $(".selectedRow").removeClass("selectedRow")
+    $(".selectedRow").removeClass("selectedRow bg-info")
 
     if (!isSelected) {
         console.log(tr.id + " is NOT selected!")
-        $(tr).addClass( "selectedRow" )
+        $(tr).addClass( "selectedRow bg-info" )
     }
 
 
