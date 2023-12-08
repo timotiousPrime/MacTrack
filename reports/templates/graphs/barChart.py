@@ -1,7 +1,7 @@
 from bokeh.models import ColumnDataSource
 from bokeh.plotting import figure, show
 from bokeh.transform import factor_cmap
-from bokeh.palettes import Bright6
+from bokeh.palettes import Bright6, Spectral
 from bokeh.embed import components
 import math
 
@@ -40,5 +40,34 @@ def get_graph_components(x_axis_list, y_axis_list):
     except Exception as e:
         print(e)
 
+
+    return (script, div)
+    
+def get_stacked_graph_components(xRange, vertStack, data):
+    script, div = None, None
+
+    plot = figure(
+        x_range=xRange, 
+        height = 250, 
+        title="Task Times",
+        toolbar_location=None,
+        tools="hover",
+        tooltips="$name @descriptions: @$name")
+    
+    descCount = len(data.keys())-1
+    graphColors = Spectral[descCount]
+    
+    
+    plot.vbar_stack(vertStack, x="description", width=0.9, color=Spectral[descCount], source=data, legend_label=list(vertStack))
+
+    plot.y_range.start = 0
+    plot.x_range.range_padding = 0.1
+    plot.xgrid.grid_line_color = None
+    plot.axis.minor_tick_line_color = None
+    plot.outline_line_color = None
+    plot.legend.location = "top_left"
+    plot.legend.orientation = "horizontal"
+
+    script, div = components(plot)
 
     return (script, div)
