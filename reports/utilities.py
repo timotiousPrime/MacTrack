@@ -7,7 +7,7 @@ from timesheets.models import TaskTime
 from members.models import User_Profile
 
 # Import graph components
-from .templates.graphs.barChart import get_graph_components
+from .templates.graphs.barChart import get_graph_components, get_stacked_graph_components
 
 # Utility functions for report views
 
@@ -53,4 +53,50 @@ def designerReportContext():
         "div": div
     }
 
+    return context
+
+def getDesignerTaskTimeChartContext(userId):
+    userTasks = TaskTime.objects.filter(user=userId)
+    jobTasks = set()            # {(job_code, ancillary_code),} --> these are the tasks that will be the column of the graph
+    taskDescriptions = set()    # {task.description,} --> these is what the column of the graph will be divided into **This will be converted to a list
+    taskTypes = set()           # {(job_code, ancillary_code, description),} --> this is a unique list of the tasks per jc, anc, and desc used to get the total time 
+    uniqueTaskTimes = {}         # {'job_code-ancillary_code-description': total elapsed time,}
+    taskTypeTimes = {}          # {'description': list of total time of description per jobTask,}
+
+    for task in userTasks:
+        jobTaskTuple = (str(task.job_code), str(task.ancillary_code)) 
+        taskTypeTuple = (str(task.job_code), str(task.ancillary_code), str(task.description))
+        taskDescriptions.add(str(task.description))
+        jobTasks.add (jobTaskTuple)
+        taskTypes.add (taskTypeTuple)
+        taskType = str(task.job_code) + "-" + str(task.ancillary_code) + "-" + str(task.description)
+        if taskType in uniqueTaskTimes:
+            uniqueTaskTimes[taskType] += round(task.elapsed_time.total_seconds()/3600, 2) # hours
+        else:
+            uniqueTaskTimes[taskType] = round(task.elapsed_time.total_seconds()/3600, 2) # hours
+
+    # Convert jobTask set into a list of strings
+    jobs = [task[0] + "-" + task[1] for task in jobTasks] 
+    taskTypeTimes["description"] = jobs
+    
+    for desc in taskDescriptions:
+            taskTypeTimes[desc] = []
+            for task in jobTasks:
+                taskType = task[0] + "-" + task[1] + "-" + desc
+                if taskType in uniqueTaskTimes:
+                    taskTypeTimes[desc].append(uniqueTaskTimes[taskType])
+                else:
+                    taskTypeTimes[desc].append(0)
+
+
+
+    script, div = get_stacked_graph_components(jobs, taskDescriptions, taskTypeTimes)
+
+    context = {
+        "title": "Designer Task Reports",
+        "script": script,
+        "div": div
+    }
+
+    # projects, taskDescriptions, taskTypeTimes 
     return context
