@@ -71,9 +71,9 @@ def getDesignerTaskTimeChartContext(userId):
         taskTypes.add (taskTypeTuple)
         taskType = str(task.job_code) + "-" + str(task.ancillary_code) + "-" + str(task.description)
         if taskType in uniqueTaskTimes:
-            uniqueTaskTimes[taskType] += round(task.elapsed_time.total_seconds()/3600, 2) # hours
+            uniqueTaskTimes[taskType] += round(task.elapsed_time.total_seconds()/3600, 1) # hours
         else:
-            uniqueTaskTimes[taskType] = round(task.elapsed_time.total_seconds()/3600, 2) # hours
+            uniqueTaskTimes[taskType] = round(task.elapsed_time.total_seconds()/3600, 1) # hours
 
     # Convert jobTask set into a list of strings
     jobs = [task[0] + "-" + task[1] for task in jobTasks] 
