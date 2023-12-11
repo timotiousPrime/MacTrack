@@ -1,7 +1,7 @@
 from bokeh.models import ColumnDataSource
 from bokeh.plotting import figure, show
 from bokeh.transform import factor_cmap
-from bokeh.palettes import Bright6, Spectral
+from bokeh.palettes import Bright6, Spectral, Plasma
 from bokeh.embed import components
 import math
 
@@ -48,20 +48,20 @@ def get_stacked_graph_components(xRange, vertStack, data):
 
     plot = figure(
         x_range=xRange, 
-        height = 250, 
+        height = 500, 
         title="Task Times",
         toolbar_location=None,
         tools="hover",
-        tooltips="$name @descriptions: @$name")
+        tooltips="$name: @$name")
     
     descCount = len(data.keys())-1
-    graphColors = Spectral[descCount]
+    graphColors = Plasma[descCount]
     
-    
-    plot.vbar_stack(vertStack, x="description", width=0.9, color=Spectral[descCount], source=data, legend_label=list(vertStack))
+    plot.vbar_stack(vertStack, x="description", width=0.9, color=graphColors, source=data, legend_label=list(vertStack))
 
     plot.y_range.start = 0
     plot.x_range.range_padding = 0.1
+    plot.xaxis.major_label_orientation = math.pi/2.6
     plot.xgrid.grid_line_color = None
     plot.axis.minor_tick_line_color = None
     plot.outline_line_color = None
