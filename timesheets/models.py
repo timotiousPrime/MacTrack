@@ -61,6 +61,12 @@ class TaskTime(models.Model):
 
     def __str__(self) -> str:
         return str(self.job_code) + ": " + str(self.elapsed_time)
+    
+    def get_description_count(self):
+        return len(self.JOB_DESCRIPTIONS)
+    
+    def get_descriptions(self):
+        return [desc[1] for desc in self.JOB_DESCRIPTIONS]
 
     def get_elapsed_time(self):
         """Get elapsed time of task"""
