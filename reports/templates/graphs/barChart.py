@@ -62,8 +62,8 @@ def get_stacked_graph_components(xRange, vertStack, data):
     plot.vbar_stack(vertStack, x="colData", width=0.9, color=graphColors, source=source, legend_label=vertStack)
 
     plot.y_range.start = 0
-    plot.x_range.range_padding = 0.1
-    plot.xaxis.major_label_orientation = math.pi/2.6
+    plot.x_range.range_padding = 0.4
+    plot.xaxis.major_label_orientation = math.pi/2
     plot.xgrid.grid_line_color = None
     plot.axis.minor_tick_line_color = None
     plot.outline_line_color = None
