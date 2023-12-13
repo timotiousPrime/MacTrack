@@ -1,4 +1,4 @@
-from bokeh.models import ColumnDataSource
+from bokeh.models import ColumnDataSource, FactorRange
 from bokeh.plotting import figure, show
 from bokeh.transform import factor_cmap
 from bokeh.palettes import Bright6, Spectral, Plasma
@@ -46,18 +46,20 @@ def get_graph_components(x_axis_list, y_axis_list):
 def get_stacked_graph_components(xRange, vertStack, data):
     script, div = None, None
 
+    source = ColumnDataSource(data)
+
     plot = figure(
-        x_range=xRange, 
+        x_range=FactorRange(*xRange), 
         height = 500, 
         title="Task Times",
         toolbar_location=None,
         tools="hover",
         tooltips="$name: @$name")
     
-    descCount = len(data.keys())-1
+    descCount = len(vertStack)
     graphColors = Plasma[descCount]
     
-    plot.vbar_stack(vertStack, x="description", width=0.9, color=graphColors, source=data, legend_label=list(vertStack))
+    plot.vbar_stack(vertStack, x="colData", width=0.9, color=graphColors, source=source, legend_label=vertStack)
 
     plot.y_range.start = 0
     plot.x_range.range_padding = 0.1
