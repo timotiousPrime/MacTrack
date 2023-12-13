@@ -57,40 +57,72 @@ def designerReportContext():
 
 def getDesignerTaskTimeChartContext(userId):
     userTasks = TaskTime.objects.filter(user=userId)
-    jobTasks = set()            # {(job_code, ancillary_code),} --> these are the tasks that will be the column of the graph
-    taskDescriptions = set()    # {task.description,} --> these is what the column of the graph will be divided into **This will be converted to a list
-    taskTypes = set()           # {(job_code, ancillary_code, description),} --> this is a unique list of the tasks per jc, anc, and desc used to get the total time 
-    uniqueTaskTimes = {}         # {'job_code-ancillary_code-description': total elapsed time,}
-    taskTypeTimes = {}          # {'description': list of total time of description per jobTask,}
+    
+    # get a list of all projects user has worked on (no duplicates and ordered alphabetically)
+    jobTasksSet = set()
 
     for task in userTasks:
-        jobTaskTuple = (str(task.job_code), str(task.ancillary_code)) 
-        taskTypeTuple = (str(task.job_code), str(task.ancillary_code), str(task.description))
-        taskDescriptions.add(str(task.description))
-        jobTasks.add (jobTaskTuple)
-        taskTypes.add (taskTypeTuple)
-        taskType = str(task.job_code) + "-" + str(task.ancillary_code) + "-" + str(task.description)
-        if taskType in uniqueTaskTimes:
-            uniqueTaskTimes[taskType] += round(task.elapsed_time.total_seconds()/3600, 1) # hours
-        else:
-            uniqueTaskTimes[taskType] = round(task.elapsed_time.total_seconds()/3600, 1) # hours
+        jobTasksSet.add(str(task.job_code))
 
-    # Convert jobTask set into a list of strings
-    jobs = [task[0] + "-" + task[1] for task in jobTasks] 
-    taskTypeTimes["description"] = jobs
-    
-    for desc in taskDescriptions:
-            taskTypeTimes[desc] = []
-            for task in jobTasks:
-                taskType = task[0] + "-" + task[1] + "-" + desc
-                if taskType in uniqueTaskTimes:
-                    taskTypeTimes[desc].append(uniqueTaskTimes[taskType])
+    jobTasksList = list(jobTasksSet)    
+    jobTasksList.sort()
+
+    # create dictionary to store total time per description per ancillary code per project
+    # jobTasks = {
+    #     "jobCode": {
+    #         "ancillaryCode": {
+    #             "description": "elapsedTime"
+    #         }
+    #     }
+    # }
+
+    jobTasks = {}
+
+    for job in jobTasksList:
+        jobTasks[job] = {}
+
+    for job in jobTasks:
+        for task in userTasks:
+            if job == str(task.job_code):
+                key = str(task.ancillary_code)
+                descKey = str(task.description)
+                if not key in jobTasks[job]:
+                    jobTasks[job][key] = {}
+                    jobTasks[job][key][descKey] = round(task.elapsed_time.total_seconds()/3600, 1)
+                elif key in jobTasks[job] and descKey in jobTasks[job][key]: 
+                    jobTasks[job][key][descKey] += round(task.elapsed_time.total_seconds()/3600, 1)
                 else:
-                    taskTypeTimes[desc].append(0)
+                    jobTasks[job][key][descKey] = round(task.elapsed_time.total_seconds()/3600, 1)
 
+    # Factors is a list of tuples 
+    # each tuple represents a column
+    # the first value in the tuple represents the project(group) and the second value represents the ancillary task (column)
+    factors = []
+    for job in jobTasks:
+        for task in jobTasks[job]:
+            factors.append((job, task))
 
+    factors.sort(key=lambda x: x[1])
+    factors.sort(key=lambda x: x[0])
 
-    script, div = get_stacked_graph_components(jobs, taskDescriptions, taskTypeTimes)
+    descriptionList = userTasks[0].get_descriptions()
+
+    descriptionList.sort()
+
+    # See Bokeh Stacked bar graph documentation for how it needs the data structured
+    data = {}
+
+    data["colData"] = factors
+
+    for desc in descriptionList:
+        data[desc] = []
+        for f in factors:
+            if desc in jobTasks[f[0]][f[1]]:
+                data[desc].append(jobTasks[f[0]][f[1]][desc])
+            else:
+                data[desc].append(0)
+
+    script, div = get_stacked_graph_components(factors, descriptionList, data)
 
     context = {
         "title": "Designer Task Reports",
