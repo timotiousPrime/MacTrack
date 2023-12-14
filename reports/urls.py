@@ -7,4 +7,5 @@ urlpatterns = [
     path("taskTimers/", views.task_timer_reports, name='Task_Timer_Reports'),
     path("admin/", views.admin_reports_page, name='Admin_Reports'),
     path("admin/taskTimes", views.full_task_time_report, name='Task_Time_Report'),
+    path("admin/projectTaskChart", views.project_task_chart, name='Project_Task_Chart'),
 ]
