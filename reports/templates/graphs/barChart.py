@@ -1,5 +1,5 @@
-from bokeh.models import ColumnDataSource, FactorRange
-from bokeh.plotting import figure, show
+from bokeh.models import ColumnDataSource, FactorRange, BoxZoomTool, WheelZoomTool, ResetTool
+from bokeh.plotting import figure, show 
 from bokeh.transform import factor_cmap
 from bokeh.palettes import Bright6, Spectral, Plasma
 from bokeh.embed import components
@@ -54,7 +54,8 @@ def get_stacked_graph_components(xRange, vertStack, data):
         sizing_mode="stretch_width",
         title="Task Times",
         toolbar_location=None,
-        tools="hover",
+        tools= [BoxZoomTool(), WheelZoomTool(), ResetTool()],
+        # tools="hover",
         tooltips="$name: @$name")
     
     descCount = len(vertStack)
