@@ -130,5 +130,4 @@ def getDesignerTaskTimeChartContext(userId):
         "div": div
     }
 
-    # projects, taskDescriptions, taskTypeTimes 
     return context
