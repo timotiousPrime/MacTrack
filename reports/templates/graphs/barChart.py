@@ -51,6 +51,7 @@ def get_stacked_graph_components(xRange, vertStack, data):
     plot = figure(
         x_range=FactorRange(*xRange), 
         height = 500, 
+        sizing_mode="stretch_width",
         title="Task Times",
         toolbar_location=None,
         tools="hover",
