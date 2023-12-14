@@ -131,3 +131,81 @@ def getDesignerTaskTimeChartContext(userId):
     }
 
     return context
+
+
+def getAdminProjectTimesChartContext():
+    tasks = TaskTime.objects.all()
+    
+    # get a list of all projects user has worked on (no duplicates and ordered alphabetically)
+    jobTasksSet = set()
+
+    for task in tasks:
+        jobTasksSet.add(str(task.job_code))
+
+    jobTasksList = list(jobTasksSet)    
+    jobTasksList.sort()
+
+    # create dictionary to store total time per description per ancillary code per project
+    # jobTasks = {
+    #     "jobCode": {
+    #         "ancillaryCode": {
+    #             "description": "elapsedTime"
+    #         }
+    #     }
+    # }
+
+    jobTasks = {}
+
+    for job in jobTasksList:
+        jobTasks[job] = {}
+
+    for job in jobTasks:
+        for task in tasks:
+            if job == str(task.job_code):
+                key = str(task.ancillary_code)
+                descKey = str(task.description)
+                if not key in jobTasks[job]:
+                    jobTasks[job][key] = {}
+                    jobTasks[job][key][descKey] = round(task.elapsed_time.total_seconds()/3600, 1)
+                elif key in jobTasks[job] and descKey in jobTasks[job][key]: 
+                    jobTasks[job][key][descKey] += round(task.elapsed_time.total_seconds()/3600, 1)
+                else:
+                    jobTasks[job][key][descKey] = round(task.elapsed_time.total_seconds()/3600, 1)
+
+    # Factors is a list of tuples 
+    # each tuple represents a column
+    # the first value in the tuple represents the project(group) and the second value represents the ancillary task (column)
+    factors = []
+    for job in jobTasks:
+        for task in jobTasks[job]:
+            factors.append((job, task))
+
+    factors.sort(key=lambda x: x[1])
+    factors.sort(key=lambda x: x[0])
+
+    descriptionList = tasks[0].get_descriptions()
+
+    descriptionList.sort()
+
+    # See Bokeh Stacked bar graph documentation for how it needs the data structured
+    data = {}
+
+    data["colData"] = factors
+
+    for desc in descriptionList:
+        data[desc] = []
+        for f in factors:
+            if desc in jobTasks[f[0]][f[1]]:
+                data[desc].append(jobTasks[f[0]][f[1]][desc])
+            else:
+                data[desc].append(0)
+
+    script, div = get_stacked_graph_components(factors, descriptionList, data)
+
+    context = {
+        "title": "Admin Project Time Reports",
+        "script": script,
+        "div": div
+    }
+
+    return context
