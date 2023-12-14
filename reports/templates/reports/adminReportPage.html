@@ -2,13 +2,31 @@
 {% block content %}
 
 <main class="px-4 mt-2">
-    <div class="container card-container">
+    <!-- <div class="container card-container">
         <div class="row h-20">
             <div class="designerTaskTimesCard col-sm-12 p-4 col-6 themed-grid-col">
                 {% include 'partials/designerTaskTimeCard.html' %}
             </div>
         </div>
+    </div> -->
+
+    <div class="card my-2" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">Designer Timesheets</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Table of task times</h6>
+            <a href="{% url 'Task_Time_Report' %}" class="btn btn-primary">See Full History</a>
+        </div>
     </div>
+
+    <div class="card my-2" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">Project Task Chart</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Project Component Time Chart</h6>
+            <a href="{% url 'Project_Task_Chart' %}" class="btn btn-primary">See Graph</a>
+        </div>
+    </div>
+
+
 </main>
 
 {% endblock content %}
