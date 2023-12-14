@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.utils import timezone
-from reports.utilities import getDesignerTaskTimeChartContext
+from reports.utilities import getDesignerTaskTimeChartContext, getAdminProjectTimesChartContext
 
 # Import Utilites
 from .utilities import adminReportsContext
@@ -83,6 +83,13 @@ def full_task_time_report(request):
     }
     return render(request, "reports/taskTimeReport.html", context)
 
+@login_required
+@user_passes_test(admin_check, login_url='/reports/taskTimers/')
+def project_task_chart(request):
+
+    context = getAdminProjectTimesChartContext()
+    
+    return render(request, "reports/projectTaskChart.html", context)
 
 
 # This is WORK IN PROGRESS
