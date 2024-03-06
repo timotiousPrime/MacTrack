@@ -23,7 +23,7 @@
                 <td>{{ task.user }}</td>
                 <td>{{ task.job_code }}</td>
                 <td>{{ task.get_description_display }}</td>
-                <td>{{ task.ancillary_code.code }} - {{ task.ancillary_code }}</td>
+                <td>{{ task.ancillary_code.code }} - {{ task.ancillary_code.description }}</td>
                 <td>{{ task.elapsed_time }}</td>
             </tr>
             {% endif %}
