@@ -36,7 +36,8 @@
                                     type="button" 
                                     class="btn btn-primary" 
                                     data-bs-toggle="modal" 
-                                    data-bs-target="#exampleModal">
+                                    data-bs-target="#exampleModal"
+                                    hx-get="{% url 'ff:Edit_Floor_Task' pk=task.user.id %}">
                                         test
                                 </button>
                             </div>
