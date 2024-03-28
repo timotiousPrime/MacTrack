@@ -3,7 +3,7 @@
     <div class="sb-sidenav-menu">
         <div class="nav">
             <div class="sb-sidenav-menu-heading">User</div>
-            <a class="nav-link" href="{% url 'User_Profile' user.username %}">
+            <a class="nav-link" href="{% if user %} {% url 'User_Profile' username=user %} {% else %} # {% endif %}">
                 <div class="sb-nav-link-icon"><i class="fas fa-address-card"></i></div>
                 Dashboard
             </a>
@@ -23,6 +23,10 @@
             <a class="nav-link" href="{% url 'Customers_Page' %}">
                 <div class="sb-nav-link-icon"><i class="fa-regular fa-address-card"></i></div>
                 Customers
+            </a>
+            <a class="nav-link" href="{% url 'ff:Fitting_Floor' %}">
+                <div class="sb-nav-link-icon"><i class="fa-regular fa-address-card"></i></div>
+                Fitting Floor
             </a>
         </div>
     </div>
