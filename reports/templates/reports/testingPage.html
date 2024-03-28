@@ -5,10 +5,9 @@
     <div class="btnGroup m-4">
         <div class="btn-group">
             <form id="projectReportFilter" action="">
-            {% csrf_token %}
-            <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                Filter Ancillary Tasks
-              </button>
+            <!-- <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"> -->
+                <!-- Filter Ancillary Tasks -->
+            <!-- </button> -->
 
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="#">Action</a></li>
@@ -21,14 +20,10 @@
           <div class="filterForm">
               {{ filterForm.as_p }}
           </div>
-          <button 
-          class="btn btn-primary"
-          type="submit" 
-          formmethod="POST" 
-          formaction="{% url 'Project_Task_Chart' %}" 
-          >
-          Apply Filter
-            </button>
+          <button class="btn btn-primary">
+            Filter
+          </button>
+            
           </form>
           
     </div>
