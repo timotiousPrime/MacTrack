@@ -5,12 +5,13 @@ from datetime import timedelta
 from django.contrib.auth.models import User
 from timesheets.models import TaskTime
 from members.models import User_Profile
+from reports.forms import adminProjectTaskTimeFilterForm
 
 # Import graph components
-from .templates.graphs.barChart import get_graph_components, get_stacked_graph_components
+from .templates.graphs.barChart import get_graph_components, get_stacked_graph_components, get_test_stacked_graph_components
+
 
 # Utility functions for report views
-
 def adminReportsContext():
     
     tasks = TaskTime.objects.all().exclude(elapsed_time = timedelta(seconds=0)).order_by("-date_created", "user", "job_code", "ancillary_code", "description")[:5]
@@ -133,7 +134,9 @@ def getDesignerTaskTimeChartContext(userId):
     return context
 
 
-def getAdminProjectTimesChartContext():
+def getAdminProjectTimesChartContext(*args):
+    print("Args: ", [arg for arg in args])
+
     tasks = TaskTime.objects.all()
     
     # get a list of all projects user has worked on (no duplicates and ordered alphabetically)
@@ -204,6 +207,44 @@ def getAdminProjectTimesChartContext():
 
     context = {
         "title": "Admin Project Time Reports",
+        "script": script,
+        "div": div,
+        "filterForm": adminProjectTaskTimeFilterForm
+    }
+
+    return context
+
+def testGraph():
+    # Test Data
+    data = {
+        "colData": [
+            ("F3", "Base"),
+            ("F3", "Cap Elevator"),
+            ("F3", "Change Parts"),
+            ("PORF1", "Change Parts"),
+            ("SURF1", "Change Parts"),
+            ("SURF1", "General"),
+            ("TRRF1", "Base"),
+            ("TRRF1", "Cap Elevator"),
+            ("TRRF1", "Change Parts"),
+            ("TRRF1", "Trolley")
+        ],
+        "Adm": [2,4,6,8,10,12,14,16,18,20],
+        "Des": [1,3,5,7,9,11,13,15,17,19],
+        "Dwg": [1,2,3,4,5,6,7,8,9,10],
+        "Gen": [0,2,0,4,0,6,0,8,0,10],
+        "Mod": [10,0,8,0,6,0,4,0,2,0]
+    }
+
+    print("hello world")
+    
+    xRange = data["colData"]
+    vertStack = ["Adm", "Des", "Dwg", "Gen", "Mod"]
+
+    script, div = get_test_stacked_graph_components(xRange, vertStack, data)
+
+    context = {
+        "title": "Testing page",
         "script": script,
         "div": div
     }

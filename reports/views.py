@@ -1,7 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.utils import timezone
-from reports.utilities import getDesignerTaskTimeChartContext, getAdminProjectTimesChartContext
+from django.http import HttpResponseNotAllowed
+
+from reports.utilities import getDesignerTaskTimeChartContext, getAdminProjectTimesChartContext, testGraph
+from reports.forms import adminProjectTaskTimeFilterForm
 
 # Import Utilites
 from .utilities import adminReportsContext
@@ -86,11 +89,27 @@ def full_task_time_report(request):
 @login_required
 @user_passes_test(admin_check, login_url='/reports/taskTimers/')
 def project_task_chart(request):
+    if request.method == "GET":
+        context = getAdminProjectTimesChartContext()
+        return render(request, "reports/projectTaskChart.html", context)
+    if request.method == "POST":
+        print("****************************************************************** POST ******************************************************************")
+        form = adminProjectTaskTimeFilterForm(request.POST)
+        print(request.POST)
+        if form.is_valid():
+            print("form is valid")
+            print("Form job_code: ", form.cleaned_data["job_code"])
+            print("Form ancillary_code: ", form.cleaned_data["ancillary_code"])
+            print("Form user: ", form.cleaned_data["user"])
+            context = getAdminProjectTimesChartContext(input)
 
-    context = getAdminProjectTimesChartContext()
+            return render(request, "reports/projectTaskChart.html", context)
+        else:
+            print("Form is not valid")
+            context = getAdminProjectTimesChartContext(input)
+            return render(request, "reports/projectTaskChart.html", context)
     
-    return render(request, "reports/projectTaskChart.html", context)
-
+    return HttpResponseNotAllowed(['GET', 'POST'])
 
 # This is WORK IN PROGRESS
 # def all_jobs_total_time_report(request):
@@ -118,3 +137,6 @@ def project_task_chart(request):
 #     }
 #     return render(request, "partials/totalJobTimeComparison.html", context)
 
+def testing_view(request):
+    context = testGraph()
+    return render(request, "reports/testingPage.html", context)
