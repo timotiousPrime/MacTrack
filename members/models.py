@@ -23,3 +23,5 @@ class User_Profile(models.Model):
     def __str__(self) -> str:
         return self.user.username
     
+    class Meta:
+        ordering = ["firstName", "lastName"]
