@@ -79,7 +79,7 @@ class UpdateFittingTask(UpdateView):
 
 def updateFittingTask(request, taskId):
     # return HttpResponse(status=200)
-    task = FittingTask.objects.get(pk=taskId)
+    task = get_object_or_404(FittingTask, id=taskId)
     if request.method == "POST":
         form = Fitting_Task_Edit_Form(request.POST)
         if form.is_valid:
@@ -87,8 +87,26 @@ def updateFittingTask(request, taskId):
             return redirect("ff:Fitting_Floor")
         
     context = {
-        "customer_form": Fitting_Task_Edit_Form(instance=task)
+        "form": Fitting_Task_Edit_Form(instance=task)
     }
     print("*****THE GET METHOD HAS BEEN CALLED*****")
-    return render(request, 'fitting_floor/updateFittingTaskPage.html', context)
+    return render(request, 'fitting_floor/test.html', context)
     
+
+    
+def testingFF(request, taskId):
+    print(f"Fitting Floor task: ${taskId} is being edited")
+    task = get_object_or_404(FittingTask, id=taskId)
+    if request.method == "POST":
+        form = Fitting_Task_Edit_Form(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("ff:Fitting_Floor")
+    
+    context = {
+        "form": Fitting_Task_Edit_Form(instance=task),
+        "task": task
+    }
+    print("*****TASK TO EDIT*****", context['task'])
+    print("*****FORM TO EDIT*****", context['form'])
+    return render(request, "fitting_floor/test.html", context)

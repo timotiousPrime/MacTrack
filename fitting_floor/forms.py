@@ -114,7 +114,7 @@ class Fitting_Task_Edit_Form(forms.ModelForm):
             ),
             "notes": forms.TextInput(
                 attrs={
-                    'type': 'time',
+                    'type': 'text-area',
                     "class": "form-control",
                 }
             ),
@@ -122,7 +122,7 @@ class Fitting_Task_Edit_Form(forms.ModelForm):
         }
 
     def __init__(self,*args, **kwargs):
-        super(Fitting_Task_Form, self).__init__(*args, **kwargs)
+        super(Fitting_Task_Edit_Form, self).__init__(*args, **kwargs)
         
         # Crispy
         self.helper = FormHelper()

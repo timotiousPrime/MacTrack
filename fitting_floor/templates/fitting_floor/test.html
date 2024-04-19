@@ -3,13 +3,15 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <h5 class="modal-title" id="exampleModalLabel">{{ task.user }}: {{ task.id }}{{ task.job_code }}{{ task.ancillary_code }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="">
-                Text HERE
-                {{ form.as_p }}
+                    {% csrf_token %}
+                    <form action="">
+                        {{ form.as_p }}
+                    </form>
                 </div>
             </div>
             <div class="modal-footer">
