@@ -28,6 +28,13 @@
                 <div class="sb-nav-link-icon"><i class="fa-regular fa-address-card"></i></div>
                 Fitting Floor
             </a>
+            {% if request.user.user_profile.role == "Man" %}
+            <div class="sb-sidenav-menu-heading">Members</div>
+            <a class="nav-link" href="{% url 'User_List' %}">
+                <div class="sb-nav-link-icon"><i class="fa-solid fa-users"></i></div>
+                Users
+            </a>
+            {% endif %}
         </div>
     </div>
     <div class="sb-sidenav-footer">
