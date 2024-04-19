@@ -7,14 +7,14 @@ from .models import User_Profile
 
 admin.site.register(TaskTime)
 
-# class ProfileInline(admin.StackedInline):
-#     model = User_Profile
+class ProfileInline(admin.StackedInline):
+    model = User_Profile
 
 # Extend User Model
 class UserAdmin(admin.ModelAdmin):
     model = User
     fields = ["username", "email"]
-    # inlines = [ProfileInline]
+    inlines = [ProfileInline]
 
 
 # Unregister initial User so we can update the modified User for admin

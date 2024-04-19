@@ -34,7 +34,11 @@ class ProjectForm(forms.ModelForm):
                     "placeholder": "Project Description"
                 }
             ),
-            "purchase_order_number": forms.TextInput(attrs={"class": "form-control"}),
+            "purchase_order_number": forms.TextInput(
+                attrs={
+                    "class": "form-control"
+                }
+            ),
             "project_captains": forms.SelectMultiple(
                 attrs={
                     "class": "form-select select2",
@@ -87,4 +91,4 @@ class CustomerForm(forms.ModelForm):
                     "placeholder": "Contact Person"
                 }
             ),
-        }
+        }        

@@ -2,5 +2,6 @@ from django.contrib import admin
 from timesheets.models import  AncillaryJobCode
 
 # Register your models here.
-
-admin.site.register(AncillaryJobCode)
+@admin.register(AncillaryJobCode)
+class AncillaryCode(admin.ModelAdmin):
+    list_display = ("code", "description")

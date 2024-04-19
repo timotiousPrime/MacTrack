@@ -14,7 +14,7 @@ class User_Profile(models.Model):
         ("Wel", "Welder"),
     ]
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="user_profile")
     firstName = models.CharField(max_length=48, null=True, blank=True)
     lastName = models.CharField(max_length=48, null=True, blank=True)
     role = models.CharField(max_length=3, choices=USER_ROLE, default="Gen")
@@ -23,3 +23,5 @@ class User_Profile(models.Model):
     def __str__(self) -> str:
         return self.user.username
     
+    class Meta:
+        ordering = ["firstName", "lastName"]

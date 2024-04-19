@@ -1,0 +1,30 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+<main id="taskTimerPage" class="container-fluid px-4">
+    <div class="container-fluid">
+        <!-- Header -->
+        {% include 'fitting_floor/fittingFloorHeader.html' %}
+        <!-- New Task Input -->
+        {% include "fitting_floor/AddNewfittingFloorTaskInput.html" %}
+        <!-- Todays Active Tasks -->
+        {% include "fitting_floor/fittingFloorTodaysTaskTable.html" %}
+    </div>
+
+    <!-- Modal for edit interface -->
+    <div class="modal fade" id="editFFModal" tabindex="-1" aria-labelledby="editFFModalLabel" aria-hidden="true">
+        <div id="fittingTaskDialog" class="modal-dialog">
+        <!-- Inject Modal HTML in here -->
+        </div>
+    </div>
+
+    {% include "fitting_floor/test.html" %}
+
+</main>
+
+
+
+{% endblock content %}

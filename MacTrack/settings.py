@@ -43,11 +43,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # crispy forms
+    'crispy_forms',
+    'crispy_bootstrap4',
+
+    # Project apps
     'main',
     'members',
     'timesheets',
     'reports',
     'projects',
+    'fitting_floor',
 ]
 
 MIDDLEWARE = [
@@ -62,6 +69,10 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'MacTrack.urls'
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
+
+CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 TEMPLATES = [
     {

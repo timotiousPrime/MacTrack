@@ -1,0 +1,52 @@
+<ul>
+    {% for fitter in fitters %}
+        <div class="row border-bottom my-2 horizontal-scrollable" style="overflow-x: auto; white-space: nowrap; scroll-behavior: smooth;">
+            <div class="col-1 fitter align-self-center">
+                <h4 class="">
+                    {{ fitter.0 }}
+                </h4>
+                <p>{{ fitter.1|length }} tasks</p>
+            </div>
+            <div class="col d-flex fitter_tasks">
+            {% for task in fitter.1 %}
+                    <div class="card mb-2 m-2 bg-info" style="min-width: 20rem;">
+                        <div class="row g-0 justify-content-center" ">
+                          <div class="col-md-8 w-100 ">
+                            <div class="card-body">
+                              <h5 class="card-title">{{ task.job_code }} - {{ task.ancillary_code }}</h5>
+                              <p class="card-text">{{ task.time_started|time }} - {{ task.time_stopped|time }} : {{ task.elapsed_time }}</p>
+                              <p class="card-text m-0"><small class="text-muted">{{ task.date_created }}</small></p>
+                              <p class="card-text m-0"><small class="text-muted">task ID:{{ task.pk }}</small></p>
+                            </div>
+                          </div>
+                            <div class="col btn-group p-2">
+                                <a 
+                                    class="btn btn-warning" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#exampleModal"
+                                    hx-cache="false"
+                                    hx-target="#exampleModal"
+                                    hx-swap="outerHTML" 
+                                    hx-get="{% url 'ff:Edit_Floor_Task' taskId=task.id %}">
+                                    edit    
+                                </a>
+                                <a href="{% url 'ff:Delete_Floor_Task' pk=task.pk %}" class="btn btn-danger">
+                                    delete
+                                </a>
+                                <button 
+                                    type="button" 
+                                    class="btn btn-primary" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#exampleModal"
+                                    hx-get="{% url 'ff:Edit_Floor_Task' taskId=task.id %}">
+                                        test
+                                </button>
+                            </div>
+                        </div>
+                    </div> 
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+</ul>
+

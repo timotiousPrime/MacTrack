@@ -1,0 +1,33 @@
+{% load crispy_forms_tags %}
+
+<form hx-post="{{ request.path }}" class="modal-content">
+    {% csrf_token %}
+    <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Edit Profile: {{ user.username }}</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+            <div class="userForm mb-4 p-2">
+                <h4 class="mb-2">Login Details</h4>
+                {{ user_form|crispy }}
+            </div>
+            <div class="userProfileForm">
+                <h4 class="mt-1 mb-2">Profile Details</h4>
+                {{ user_profile|crispy }}
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary">Update</button>
+    </div>
+  </form>
+
+  <script>
+    htmx.on("htmx:beforeSwap", (e) => {
+  // Empty response targeting #dialog => hide the modal
+  if (e.detail.target.id == "dialog" && !e.detail.xhr.response) {
+    modal.hide()
+    e.detail.shouldSwap = false
+  }
+})
+  </script>

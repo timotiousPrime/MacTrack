@@ -1,0 +1,48 @@
+<div class="addTime row">
+    <div class="form-style form-style-five">
+        <div class="row">
+            <div class="col-lg">
+                <div class="form-input mt-5">
+                    <form action="#">
+                    {% csrf_token %}
+                        <table class="table table-hover">
+                            <thead>
+                                <th>
+
+                                </th>
+                                {% for input in form %}
+                                    <th>
+                                        {{ input.label }}
+                                    </th>
+                                {% endfor %}
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="col">
+                                        New Task
+                                    </th>
+                                    {% for input in form %}
+                                        <td scope="col">
+                                            {{ input }}
+                                        </td>
+                                    {% endfor %}
+                                    <td>
+                                        <button 
+                                            id="addTask" 
+                                            type="submit" 
+                                            formmethod="POST" 
+                                            formaction="{% url 'ff:Create_Floor_Task' %}" 
+                                            class="btn btn-m btn-primary"
+                                            >
+                                            Add
+                                            </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

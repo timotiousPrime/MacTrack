@@ -24,4 +24,5 @@ urlpatterns = [
     path('taskTimer/', include('timesheets.urls')),
     path('reports/', include('reports.urls')),
     path('projects/', include('projects.urls')),
+    path('fitting_floor/', include('fitting_floor.urls')),
 ]

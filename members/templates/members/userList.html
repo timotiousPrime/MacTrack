@@ -1,0 +1,79 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+<main class="px-4 py-2">
+    <h1>User List</h1>
+
+    <div class="btns my-4">
+        <button 
+            type="button" 
+            data-bs-toggle="modal" 
+            data-bs-target="#newUserModal"
+            class="btn btn-primary"
+            hx-get="{% url 'Add_User' %}"
+            hx-target="#newUserModalDialog"
+            hx-swap="innerHTML"
+            >
+                New User
+            </button>
+    </div>
+
+    <table class="table table-striped border border-2 w-100">
+        <thead>
+            <tr>
+                <th class="col">User</th>
+                <th class="col">First Name</th>
+                <th class="col">Last Name</th>
+                <th class="col">Role</th>
+                <th class="col text-center">Is Active</th>
+                <th class="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for profile in object_list %}
+            <tr>
+                <th scope="row">{{ profile.user }}</th>
+                <td>{{ profile.firstName }}</td>
+                <td>{{ profile.lastName }}</td>
+                <td class="col-1">{{ profile.get_role_display }}</td>
+                <td class="col-1 text-center">
+                    <input class="form-check-input" disabled {% if profile.is_active %} checked {% endif %} type="checkbox">
+                </td>
+                <td class="col-1 text-center">
+                    <button 
+                    type="button"
+                    hx-get="{% url 'Edit_User' userId=profile.user.id %}"
+                    hx-target="#editUserModalDialog"
+                    hx-swap="innerHTML"
+                    data-bs-toggle="modal" 
+                    data-bs-target="#editUserModal"
+                    class="btn btn-sm btn-warning">
+                        edit
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+     <!-- Pagination -->
+    <div class='pagination justify-content-center'>
+        {% if page_obj.has_previous %}
+        <a href='{% url "User_List" %}?page={{ page_obj.previous_page_number }}'><i class="fa-solid fa-caret-left"></i> </a>
+        {% endif %}
+
+        <span class='mx-4'>
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+        <a href='{% url "User_List" %}?page={{ page_obj.next_page_number }}' > <i class="fa-solid fa-caret-right"></i></a>
+        {% endif %}
+    </div>
+    <!-- END Pagination -->
+</main>
+
+{% include "members/newUserModal.html" %}
+{% include "members/editUserModal.html" %}
+
+{% endblock %}
