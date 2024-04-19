@@ -113,7 +113,7 @@ def getManagerDashboardContext(userId):
     user_tasks = list(TaskTime.objects.filter(user=user).exclude(elapsed_time=None).order_by('-id'))[:5]
 
     context = {
-        "title": "Dashboard",
+        "title": "Manager Dashboard",
         'user': user,
         'user_tasks': user_tasks,
         "reports": "Here are some task timer reports",
